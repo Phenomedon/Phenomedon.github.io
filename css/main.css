@@ -1,4 +1,8 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto|Roboto+Condensed|Roboto+Mono|Ubuntu|Ubuntu+Condensed|Ubuntu+Mono&display=swap');
+
 body {
+    font-family: 'Ubuntu', 'Helvetica', 'Sans-Serif';
+    background: radial-gradient(rgb(50, 0, 0), rgb(0,0,0));
     margin: 60px auto;
     width: 70%;
 }
@@ -20,8 +24,16 @@ a:hover {
     text-decoration: underline;
 }
 h1 {
+    color: rgb(255, 175, 0);
+    text-shadow: 
+    -0.5px -0.5px 0px red,
+    -0.5px 0.5px 0px red,
+     0.5px -0.5px 0px red,
+     0.5px 0.5px 0px red,
+     0px 0px 20px #ff471a,
+     0px 0px 10px #ff9900,
+     0px 0px 5px #ff471a;
     font-size: 3em;
-    font-family:'Helvetica', 'Arial', 'Sans-Serif';
 }
 p {
     font-size: 1.5em;
