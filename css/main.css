@@ -2,7 +2,7 @@
 
 body {
     font-family: 'Ubuntu', 'Helvetica', 'Sans-Serif';
-    background-image: radial-gradient(#3c0000, #000000);
+    background-image: radial-gradient(circle, #3c0000, #000000);
     color: #ffff80;
     margin: 60px auto;
     width: 70%;
