@@ -4,6 +4,14 @@ body {
     font-family: 'Ubuntu', 'Helvetica', 'Sans-Serif';
     background-image: radial-gradient(circle, #3c0000, #000000);
     color: #ffff80;
+    text-shadow: 
+    -0.5px -0.5px 1px rgba(255, 255, 0, 0.1),
+    -0.5px 0.5px 1px rgba(255, 255, 0, 0.1),
+    0.5px -0.5px 1px rgba(255, 255, 0, 0.1),
+    0.5px 0.5px 1px rgba(255, 255, 0, 0.1),
+    0px 0px 10px #ff471a,
+    0px 0px 5px #ff9900,
+    0px 0px 2.5px #ff471a;
     margin: 60px auto;
     width: 70%;
 }
