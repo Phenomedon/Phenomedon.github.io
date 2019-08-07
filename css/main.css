@@ -1,4 +1,12 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto|Roboto+Condensed|Roboto+Mono|Ubuntu|Ubuntu+Condensed|Ubuntu+Mono&display=swap');
+@font-face {
+    font-family: 'dottyregular';
+    src: url('../assets/fonts/dotty-webfont.woff2') format('woff2'),
+         url('../assets/fonts/dotty-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
 
 body {
     font-family: 'Ubuntu Condensed', 'Helvetica', 'Sans-Serif';
@@ -33,6 +41,7 @@ a:hover {
     text-decoration: underline;
 }
 h1 {
+    font-family: 'dottyregular';
     color: rgb(255, 175, 0);
     text-shadow: 
     -0.5px -0.5px 0px red,
