@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto|Roboto+Condensed|Roboto+Mono|Ubuntu|Ubuntu+Condensed|Ubuntu+Mono&display=swap');
 
 body {
-    font-family: 'Ubuntu', 'Helvetica', 'Sans-Serif';
+    font-family: 'Ubuntu Condensed', 'Helvetica', 'Sans-Serif';
     background-image: radial-gradient(circle, #3c0000, #000000);
     color: #ffff80;
     text-shadow: 
