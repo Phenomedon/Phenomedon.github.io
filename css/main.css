@@ -40,9 +40,19 @@ a {
     text-shadow:
     0px 0px 5px #ff9900,
     0px 0px 2.5px #ff471a;
+    transition-property: text-shadow, text-decoration;
+    transition-duration: 0.75s;
 }
 a:hover {
     text-decoration: underline;
+    text-shadow:
+    -0.5px -0.5px 1px rgba(255, 255, 255, 0.2),
+    -0.5px 0.5px 1px rgba(255, 255, 255, 0.2),
+    0.5px -0.5px 1px rgba(255, 255, 255, 0.2),
+    0.5px 0.5px 1px rgba(255, 255, 255, 0.2),
+    0px 0px 20px rgba(255, 255, 255, 0.6),
+    0px 0px 10px rgba(255, 255, 255, 0.6),
+    0px 0px 2.5px rgba(255, 255, 255, 0.6);
 }
 h1 {
     font-family: 'dottyregular';
