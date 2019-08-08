@@ -9,6 +9,13 @@
 
 }
 
+@font-face {
+    font-family: 'determinationsans';
+    src: url("../assets/fonts/determinationsansweb-webfont.ttf") format('truetype'),
+    font-weight: normal;
+    font-style: normal;
+}
+
 body {
     font-family: 'Ubuntu Condensed', 'Helvetica', 'Sans-Serif';
     background-image: radial-gradient(circle, #1e0000, #000000);
@@ -81,7 +88,7 @@ a:hover:before {
     transform: scaleX(1);
 }
 h1 {
-    font-family: 'dottyregular';
+    font-family: 'determinationsans';
     color: rgb(255, 175, 0);
     text-shadow: 
     -0.5px -0.5px 0px red,
