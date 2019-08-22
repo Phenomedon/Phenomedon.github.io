@@ -1,0 +1,186 @@
+@charset "utf-8";
+
+// Import font faces
+@import url('https://fonts.googleapis.com/css?family=Roboto|Roboto+Condensed|Roboto+Mono|Ubuntu|Ubuntu+Condensed|Ubuntu+Mono&display=swap');
+@font-face {
+    font-family: 'determinationsans';
+    src: url("../assets/fonts/determinationsansweb-webfont.ttf") format('truetype'),
+         url("../assets/fonts/determinationsansweb-webfont.woff2") format('woff2'),
+         url("../assets/fonts/determinationsansweb-webfont.woff") format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+// Define theme fonts
+
+$base-font-family: 'Ubuntu Condensed', 'Helvetica', 'Sans-Serif' !default;
+$base-font-weight: normal !default;
+$title-font-family: 'determinationsans', 'Helvetica', 'Sans-Serif' !default;
+$nav-font-family: 'Roboto', 'Helvetica', 'Arial', 'Sans-Serif' !default;
+$quote-font-family: 'Roboto Mono', 'Helvetica', 'Arial', 'Sans-Serif' !default;
+
+// Define spacing
+
+$spacing-unit:     30px !default; // maybe make relative: 1.875em
+
+// Set typographical vertical rhythm
+
+$base-font-size:   1em !default;
+$base-line-height: 1.5 * $base-font-size !default;
+// Exponential function
+@function pow($number, $exponent) {
+  $value: 1;
+
+  @if $exponent > 0 {
+    @for $i from 1 through $exponent {
+      $value: $value * $number;
+    }
+  } @else if $exponent < 0 {
+    @for $i from 1 through -$exponent {
+      $value: $value / $number;
+    }
+  }
+
+  @return $value;
+}
+// Set modular type scale at 4:3 ratio (same ratio as a perfect fourth in music)
+$scale-factor: 4/3;
+$type-scales: (
+  -2: pow($scale-factor, -2) * $base-font-size,  // tiny text
+  -1: pow($scale-factor, -1) * $base-font-size,  // small text
+  0: $base-font-size,                            // body text
+  1: pow($scale-factor, 1) * $base-font-size,    // large text
+  2: pow($scale-factor, 2) * $base-font-size,    // heading text
+  3: pow($scale-factor, 3) * $base-font-size,    // title text
+);
+// Helper function to extract font size
+@function type-scale($level) {
+  @return map-get($type-scales, $level);
+}
+// Set baseline grid
+$line-heights: (
+  -2: $base-line-height / 2,
+  -1: $base-line-height,
+  0: $base-line-height,
+  1: $base-line-height * 2,
+  2: $base-line-height * 2,
+  3: $base-line-height * 2
+);
+// Helper function to extract line-height
+@function line-height($level) {
+  @return map-get($line-heights, $level);
+}
+// Mixin to set typographical vertical rhythm for elements
+@mixin type-setting($level: 0) {
+  font-size: type-scale($level);
+  line-height: line-height($level);
+}
+// Mixin for relative typographical vertical rhythm
+@mixin relative-type-setting($scale) {
+  font-size: type-scale(0) * $scale;
+  line-height: line-height(0) * $scale;
+}
+
+// Define theme colors
+
+$terminal-orange: #ffae00;       // header and accent color
+$terminal-yellow: #ffff80;       // main text color
+$terminal-purple-light: #f5eff4; // main strong color
+$terminal-vermilion: #ff471a;    // text shadow 1 and 3 color
+$terminal-orange-peel: #ff9900;  // text shadow 2 color
+$terminal-rajah: #f4bf75;        // link color
+$terminal-conifer: #b4da55;         // alternate text color
+$tube-red: #1e0000;              // background Red
+$black: #000000;
+$white: #ffffff;
+$yellow: #ffff00;
+$red: #ff0000;
+
+// Table settings
+
+$table-text-align: left !default;
+
+// Content area width variables
+
+$content-width:    800px !default;
+
+$on-palm:          600px !default;
+$on-laptop:        800px !default;
+
+// Text border and cathode-ray tube (crt) effects
+
+// Produce a border around text - defaults to crisp border
+@function text-border($offset, $color, $alpha, $blur:0) {
+  $shade: rgba($color, $alpha);
+  $value: '#{$offset}px #{$offset}px #{$blur}px #{$shade}';
+  @for $i from 2 through 4 {
+    $x-val: pow(-1, $i);
+    $y-val: pow(-1, floor($i/2));
+    $x-shift: $x-val*$offset;
+    $y-shift: $y-val*$offset;
+    $value: '#{$value}, #{$x-shift}px #{$y-shift}px #{$blur}px #{$shade}';
+}
+  @return unquote($value);
+}
+
+// Create crt fuzz effect around text - defaults to centered fuzz
+@function crt-fuzz($blur, $color, $alpha, $offset:0) {
+  $value: #{$offset}px #{$offset}px #{$blur}px rgba($color, $alpha);
+
+  @return $value;
+}
+
+// mixin for crt effect on text
+@mixin text-bordered-triple-fuzz($b-offset, $b-blur, $b-color, $b-alpha,
+                                 $fuzz-1-offset, $fuzz-1-blur, $fuzz-1-color, $fuzz-1-alpha,
+                                 $fuzz-2-offset, $fuzz-2-blur, $fuzz-2-color, $fuzz-2-alpha,
+                                 $fuzz-3-offset, $fuzz-3-blur, $fuzz-3-color, $fuzz-3-alpha) {
+  text-shadow:
+  text-border($b-offset, $b-color, $b-alpha, $b-blur),
+  crt-fuzz($fuzz-1-blur, $fuzz-1-color, $fuzz-1-alpha, $fuzz-1-offset),
+  crt-fuzz($fuzz-2-blur, $fuzz-2-color, $fuzz-2-alpha, $fuzz-2-offset),
+  crt-fuzz($fuzz-3-blur, $fuzz-3-color, $fuzz-3-alpha, $fuzz-3-offset);
+}
+
+
+@mixin box-bordered-triple-fuzz($b-offset, $b-blur, $b-color, $b-alpha,
+                                 $fuzz-1-offset, $fuzz-1-blur, $fuzz-1-color, $fuzz-1-alpha,
+                                 $fuzz-2-offset, $fuzz-2-blur, $fuzz-2-color, $fuzz-2-alpha,
+                                 $fuzz-3-offset, $fuzz-3-blur, $fuzz-3-color, $fuzz-3-alpha) {
+  box-shadow:
+  text-border($b-offset, $b-color, $b-alpha, $b-blur),
+  crt-fuzz($fuzz-1-blur, $fuzz-1-color, $fuzz-1-alpha, $fuzz-1-offset),
+  crt-fuzz($fuzz-2-blur, $fuzz-2-color, $fuzz-2-alpha, $fuzz-2-offset),
+  crt-fuzz($fuzz-3-blur, $fuzz-3-color, $fuzz-3-alpha, $fuzz-3-offset);
+}
+//
+// mixin for css animated underline crt effect on links
+/*
+@mixin crt-link-stroke($stroke-distance: 0.5px, $stroke-blur: 1px, $stroke-color,
+  $stroke-alpha, $crt-distance: 0px, $crt-1-blur: 2.5px, $crt-1-color, $crt-1-alpha: 1,
+  $crt-2-blur, $crt-2-color, $crt-2-alpha: 1, $crt-3-blur, $crt-3-color, $crt-3-alpha: 1) {
+    box-shadow:
+    -$stroke-distance -$stroke-distance $stroke-blur rgba($stroke-color, $stroke-alpha),
+    -$stroke-distance $stroke-distance $stroke-blur rgba($stroke-color, $stroke-alpha),
+    $stroke-distance -$stroke-distance $stroke-blur rgba($stroke-color, $stroke-alpha),
+    $stroke-distance $stroke-distance $stroke-blur rgba($stroke-color, $stroke-alpha),
+    $crt-distance $crt-distance $crt-1-blur rgba($crt-1-color, $crt-1-alpha),
+    $crt-distance $crt-distance $crt-2-blur rgba($crt-2-color, $crt-2-alpha),
+    $crt-distance $crt-distance $crt-3-blur rgba($crt-3-color, $crt-3-alpha);
+}
+*/
+
+// mixin for media queries and responsive layout
+@mixin media-query($device) {
+  @media screen and (max-width: $device) {
+    @content;
+  }
+}
+
+
+// Import partials.
+@import
+  "terminal-red/base",
+  "terminal-red/layout"
+//  "terminal-red/syntax-highlighting"
+;

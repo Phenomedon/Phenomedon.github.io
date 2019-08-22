@@ -1,8 +1,8 @@
-<nav>
+<nav class="site-nav mainHeader">
   <ul>
   {% for item in site.data.navigation %}
   <li>
-    <a href="{{ item.link }}" {% if page.url == item.link %}style="color: red;"{% endif %}>
+    <a class="underline-glow" href="{{ item.link }}" {% if page.url == item.link %}style="color: red;"{% endif %}>
       {{ item.name }}
     </a>
   </li>

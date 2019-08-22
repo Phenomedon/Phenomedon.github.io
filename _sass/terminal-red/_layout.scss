@@ -1,0 +1,170 @@
+// Layout of individual grid components
+
+// Home nav box
+.site-home {
+  font-size: 1.5rem;
+  //border: 5px solid red;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  position: sticky;
+  top:15px;
+}
+
+// Site nav box
+.site-nav {
+  font-size: 1.5rem;
+  //border: 5px solid green;
+  padding-left: 5px;
+  position: sticky;
+  top: 15px;
+  display: grid;
+  align-items: center;
+  ul {
+    @include type-setting(0);
+    margin-bottom: 0;
+    li {
+      display:inline;
+      margin-right: 20px;
+    }
+  }
+}
+
+// Page nav or table of contents box
+.page-nav {
+  font-size: 1.5rem;
+  //border: 5px solid blue;
+}
+
+// Main content box
+.mainContent {
+  font-size: 2rem;
+  p {
+    strong {
+      color: $terminal-purple-light;
+    }
+  }
+  .page-title {
+    color: $terminal-orange;
+    margin-top: 0;
+    font-family: $title-font-family;
+    font-size: 3.5em;
+    line-height: 2.5em;
+    text-align: center;
+    @include text-bordered-triple-fuzz(0.5, 0, $red, 1,
+                                       0, 2.5, $terminal-vermilion, 1,
+                                       0, 5, $terminal-orange-peel, 1,
+                                       0, 10, $terminal-vermilion, 1);
+  }
+}
+
+// Aside content box
+.sideNotes {
+  font-size: 1.3rem;
+  //border: 5px solid yellow;
+}
+
+// Footer box
+.site-footer {
+  font-size: 0.8rem;
+  border-top: 2px solid $terminal-orange;
+  .contact-list, .social-media-list {
+    list-style: none;
+    font-weight: bold;
+  }
+  .social-media-list {
+    li {
+      display: inline;
+      margin-right: 20px;
+    }
+  }
+}
+
+// Set font-families
+.site-home, .site-nav, .site-footer {
+  font-family: $nav-font-family;
+}
+
+// SVG icons
+.svg-icon {
+  fill: $terminal-orange; //change color and add hover effect
+  padding-right: 5px;
+  vertical-align: text-top;
+  text-decoration: none;
+  transition: all 0.45s ease-in-out 0s;
+  &:hover {
+    fill: $yellow;
+    transition: all 0.45s ease-in-out 0s;
+  }
+  &:before path{
+    fill: $yellow;
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 0.1em;
+    bottom: 0;
+    left: 0;
+    background: $terminal-rajah;
+    @include box-bordered-triple-fuzz(0.5, 1, $white, 0.2,
+                                       0, 2.5, $white, 0.6,
+                                       0, 10, $white, 0.6,
+                                       0, 20, $white, 0.6);
+    visibility: hidden;
+    -webkit-transform: scaleX(0);
+    transform: scaleX(0);
+    -webkit-transition: all 0.45s ease-in-out 0s;
+    transition: all 0.45s ease-in-out 0s;
+  }
+  &:hover:before path{
+    visibility: visible;
+    -webkit-transform: scaleX(1);
+    transform: scaleX(1);
+    transition: all 0.45s ease-in-out 0s;
+  }
+}
+
+// links
+a {
+  text-decoration: none;
+}
+
+.underline-glow {
+  position: relative;
+  color: $terminal-rajah;
+  text-shadow:
+  crt-fuzz(2.5, $terminal-vermilion, 1),
+  crt-fuzz(5, $terminal-orange-peel, 1);
+  transition: all 0.45s ease-in-out 0s;
+  &:hover {
+    @include text-bordered-triple-fuzz(0.5, 1, $white, 0.2,
+                                       0, 2.5, $white, 0.6,
+                                       0, 10, $white, 0.6,
+                                       0, 20, $white, 0.6);
+  }
+  &:before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 0.1em;
+    bottom: 0;
+    left: 0;
+    background: $terminal-rajah;
+    @include box-bordered-triple-fuzz(0.5, 1, $white, 0.2,
+                                       0, 2.5, $white, 0.6,
+                                       0, 10, $white, 0.6,
+                                       0, 20, $white, 0.6);
+    visibility: hidden;
+    -webkit-transform: scaleX(0);
+    transform: scaleX(0);
+    -webkit-transition: all 0.45s ease-in-out 0s;
+    transition: all 0.45s ease-in-out 0s;
+  }
+  &:hover:before {
+    visibility: visible;
+    -webkit-transform: scaleX(1);
+    transform: scaleX(1);
+  }
+}
+
+
+// Blog page

@@ -1,22 +1,27 @@
 <!DOCTYPE html>
-	<html>
-		<head>
-			<title>{{ page.title }}</title>
-			<!-- link to main stylesheet -->
-			<link rel="stylesheet" type="text/css" href="/css/main.css">
-		</head>
+	<html lang="{{ page.lang | default: site.lang | default: "en" }}">
+
+	{%- include head.html -%}
+
 		<body>
+
+			{% include nav_home.html %}
 			{% include navigation.html %}
-			<div class="container">
+
+			<nav class="page-nav">
+				{% assign nav_content = nil %}
+			</nav>
+
+			<main class="mainContent" aria-label="Content">
 
 			{{ content }}
 
-			</div><!-- /.container -->
-			<footer>
-	    		<ul>
-	        		<li><a href="mailto:dml.walpola@gmail.com">email</a></li>
-	        		<li><a href="https://github.com/Phenomedon">github.com/Phenomedon</a></li>
-			</ul>
-			</footer>
+			</main>
+
+			<aside class="sideNotes">
+				<p>A relevant comment goes here</p>
+			</aside>
+
+			{% include footer.html %}
 		</body>
 	</html>

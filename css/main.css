@@ -19,10 +19,21 @@
 }
 
 body {
+    display: grid;
+    grid-template-areas:
+    "home header header"
+    "nav article sidebar"
+    "nav footer footer";
+    grid-template-rows: 80px 1fr 70px;
+    grid-template-columns: 20% minmax(30rem, 1fr) 15%;
+    grid-row-gap: 10px;
+    grid-column-gap: 10px;
+    height: 100vh;
+    margin: 0;
     font-family: 'Ubuntu Condensed', 'Helvetica', 'Sans-Serif';
     background-image: radial-gradient(circle, #1e0000, #000000);
     color: #ffff80;
-    text-shadow: 
+    text-shadow:
     -0.5px -0.5px 1px rgba(255, 255, 0, 0.1),
     -0.5px 0.5px 1px rgba(255, 255, 0, 0.1),
     0.5px -0.5px 1px rgba(255, 255, 0, 0.1),
@@ -30,8 +41,61 @@ body {
     0px 0px 10px #ff471a,
     0px 0px 5px #ff9900,
     0px 0px 2.5px #ff471a;
-    margin: 60px auto;
-    width: 70%;
+    margin: auto 10px;
+}
+
+/* header, footer, article, nav, div {
+  padding: 1.2em;
+  }
+  */
+
+.site-home {
+  grid-area: home;
+  border: 5px solid red;
+  justify-self: center;
+  align-self: center;
+  position: sticky;
+  top:15px;
+  }
+.site-nav {
+  grid-area: header;
+  border: 5px solid red;
+  background: blue;
+  padding-left: 5px;
+  position: sticky;
+  top: 15px;
+}
+.page-nav {
+  grid-area: nav;
+  background: green;
+  }
+
+.site-footer {
+  grid-area: footer;
+  display: grid;
+  grid-template-areas: "foot-col1 foot-col2 foot-col3";
+  grid-template-columns: 1fr 2fr 1fr;
+  }
+  .footer-col-1 {
+    grid-area: foot-col1;
+  }
+  .footer-col-2 {
+    grid-area: foot-col2;
+  }
+  .footer-col-3 {
+    grid-area: foot-col3;
+  }
+
+.mainContent {
+  grid-area: article;
+  font-size: 1.3rem;
+  }
+.sideNotes {
+  grid-area: sidebar;
+  border: 5px solid red;
+  }
+.width-highligter{
+  background: teal;
 }
 nav ul, footer ul {
     font-family: 'Roboto', 'Helvetica', 'Arial', 'Sans-Serif';
@@ -43,6 +107,23 @@ nav ul li, footer ul li {
     display: inline;
     margin-right: 20px;
 }
+
+.svg-icon {
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    fill: red;
+    padding-right: 5px;
+    vertical-align: text-top;
+    text-decoration: none;
+}
+
+.social-media-list {
+  li + li {
+    padding-top: 5px;
+  }
+}
+
 a {
     text-decoration: none;
     position: relative;
@@ -92,7 +173,7 @@ a:hover:before {
 h1 {
     font-family: 'determinationsans', 'Helvetica', 'Sans-Serif';
     color: rgb(255, 175, 0);
-    text-shadow: 
+    text-shadow:
     -0.5px -0.5px 0px red,
     -0.5px 0.5px 0px red,
      0.5px -0.5px 0px red,
@@ -115,8 +196,8 @@ footer {
     font-size: .8em;
 }
 
-ul.posts { 
-    margin: 20px auto 40px; 
+ul.posts {
+    margin: 20px auto 40px;
     font-size: 1.5em;
 }
 

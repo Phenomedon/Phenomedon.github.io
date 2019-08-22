@@ -1,5 +1,19 @@
-title: Don's Homepage
-markdown: kramdown
-description: behold.
+title: Data Séance
+author: Don Walpola
+email: dml.walpola@gmail.com
+description: >- # this means to ignore newlines until "baseurl:"
+  In depth coverage of topics and techniques in data science, machine learning,
+  artificial intelligence, systems and computational biology, big data, and
+  statistical methods - all from the perspective of a high-powered mutant of
+  some kind never even considered for mass production. The personal website of
+  Don Walpola.
 permalink: /blog/:year/:month/:day/:title
 highlighter: rouge
+twitter_username: jekyllrb
+github_username: Phenomedon
+
+# Build settings
+markdown: kramdown
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
