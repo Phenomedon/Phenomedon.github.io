@@ -167,5 +167,15 @@ a {
   }
 }
 
+.page-nav {
+  ul.post-toc {
+    color: $terminal-orange-peel;
+    li {
+      a {
+        color: $terminal-purple-light;
+      }
+    }
+  }
+}
 
 // Blog page
