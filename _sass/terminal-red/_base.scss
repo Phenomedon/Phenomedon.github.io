@@ -1,6 +1,7 @@
 // Set root font-size to default or user setting
 html {
-  font-size: 100%
+  font-size: 100%;
+  @include scrollbars(1.4em, $terminal-orange, $black);
 }
 
 // Reset element spacing

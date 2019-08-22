@@ -1,7 +1,7 @@
 title: Data Séance
 author: Don Walpola
 email: dml.walpola@gmail.com
-description: >- # this means to ignore newlines until "baseurl:"
+description: >- # this means to ignore newlines until next variable
   In depth coverage of topics and techniques in data science, machine learning,
   artificial intelligence, systems and computational biology, big data, and
   statistical methods - all from the perspective of a high-powered mutant of
@@ -9,8 +9,16 @@ description: >- # this means to ignore newlines until "baseurl:"
   Don Walpola.
 permalink: /blog/:year/:month/:day/:title
 highlighter: rouge
-twitter_username: jekyllrb
+
+# Social media usernames
+twitter_username: DonWalpola
 github_username: Phenomedon
+facebook_username: don.m.l.walpola
+instagram_username: donwalpola
+linkedin_username: don-Walpola
+kaggle_username: robonimo86
+stackoverflow_username: "users/218088/"
+
 
 # Build settings
 markdown: kramdown
