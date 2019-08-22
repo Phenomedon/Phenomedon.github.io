@@ -1,8 +1,8 @@
-- name: About
-  link: /about
 - name: Projects
   link: /projects
-- name: Explainers
-  link: /explainers
+- name: Decoders
+  link: /decoders
 - name: Blog
   link: /blog
+- name: About
+  link: /about

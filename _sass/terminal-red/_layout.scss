@@ -48,8 +48,9 @@
     color: $terminal-orange;
     margin-top: 0;
     font-family: $title-font-family;
-    font-size: 3.5em;
-    line-height: 2.5em;
+    font-size: 2em;
+    line-height: 3em;
+    margin-bottom: 0.5em;
     text-align: center;
     @include text-bordered-triple-fuzz(0.5, 0, $red, 1,
                                        0, 2.5, $terminal-vermilion, 1,

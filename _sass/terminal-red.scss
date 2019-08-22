@@ -153,22 +153,6 @@ $on-laptop:        800px !default;
   crt-fuzz($fuzz-2-blur, $fuzz-2-color, $fuzz-2-alpha, $fuzz-2-offset),
   crt-fuzz($fuzz-3-blur, $fuzz-3-color, $fuzz-3-alpha, $fuzz-3-offset);
 }
-//
-// mixin for css animated underline crt effect on links
-/*
-@mixin crt-link-stroke($stroke-distance: 0.5px, $stroke-blur: 1px, $stroke-color,
-  $stroke-alpha, $crt-distance: 0px, $crt-1-blur: 2.5px, $crt-1-color, $crt-1-alpha: 1,
-  $crt-2-blur, $crt-2-color, $crt-2-alpha: 1, $crt-3-blur, $crt-3-color, $crt-3-alpha: 1) {
-    box-shadow:
-    -$stroke-distance -$stroke-distance $stroke-blur rgba($stroke-color, $stroke-alpha),
-    -$stroke-distance $stroke-distance $stroke-blur rgba($stroke-color, $stroke-alpha),
-    $stroke-distance -$stroke-distance $stroke-blur rgba($stroke-color, $stroke-alpha),
-    $stroke-distance $stroke-distance $stroke-blur rgba($stroke-color, $stroke-alpha),
-    $crt-distance $crt-distance $crt-1-blur rgba($crt-1-color, $crt-1-alpha),
-    $crt-distance $crt-distance $crt-2-blur rgba($crt-2-color, $crt-2-alpha),
-    $crt-distance $crt-distance $crt-3-blur rgba($crt-3-color, $crt-3-alpha);
-}
-*/
 
 // mixin for media queries and responsive layout
 @mixin media-query($device) {
