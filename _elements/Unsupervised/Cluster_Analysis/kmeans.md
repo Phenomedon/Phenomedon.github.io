@@ -113,5 +113,5 @@ this dilemma, we incorporate the cluster assignment information into our
 objective function: we seek the assignment of points to clusters that minimizes
 the *within cluster* sum of squares error over all cluster assignments.
 
-<script src="../../../assets/js/d3.js"></script>
-<script src="../../../assets/js/elements/Unsupervised/Cluster_Analysis/kmeans.js"></script>
+<script src="/assets/js/d3.js"></script>
+<script src="/assets/js/elements/Unsupervised/Cluster_Analysis/kmeans.js"></script>
