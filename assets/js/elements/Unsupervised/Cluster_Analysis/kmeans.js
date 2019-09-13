@@ -128,7 +128,7 @@ var maxSteps = 3;
 var threshold = 0.1;
 
 // Load data
-var a1 = d3.csv("../../../../../datasets/elements/Unsupervised/Cluster_Analysis/kmeans/a0.csv", rowConverter);
+var a1 = d3.csv("/assets/datasets/elements/Unsupervised/Cluster_Analysis/kmeans/a0.csv", rowConverter);
 
 
 
