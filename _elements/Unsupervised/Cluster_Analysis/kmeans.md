@@ -8,6 +8,7 @@ asides:
   - The map is not the territory
 ---
 {% include shortcut_variables.html %}
+<div id="top-plot"></div>
 
 You've just loaded a fresh dataset. It's still so hot from transformation that
 your laptop fans haven't stopped whirring. After performing some basic visual
@@ -110,4 +111,7 @@ But of course, if we knew which points belonged to each cluster, we wouldn't
 need to do any damn cluster analysis in the first place. In order to address
 this dilemma, we incorporate the cluster assignment information into our
 objective function: we seek the assignment of points to clusters that minimizes
-the *within cluster* sum of squares error over all cluster assignments. 
+the *within cluster* sum of squares error over all cluster assignments.
+
+<script src="../../../assets/js/d3.js"></script>
+<script src="../../../assets/js/elements/Unsupervised/Cluster_Analysis/kmeans.js"></script>
