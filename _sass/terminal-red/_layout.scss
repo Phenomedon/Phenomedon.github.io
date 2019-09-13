@@ -82,6 +82,26 @@
   }
 }
 
+// Aside positioning into sidebar
+.aside-outer {
+  position: relative;
+  width: 100%;
+  .aside-inner {
+    width:19.32vw;
+    position: absolute;
+    margin-left: 10px;
+    left: 100%;
+    top: 0;
+    transform:translateY(-50%);
+    font-size: 1.3rem;
+    color: $terminal-conifer;
+    @include text-bordered-triple-fuzz(0.5, 1, $white, 0.1,
+                                       0, 2.5, $terminal-green-phospor, 1,
+                                       0, 5, $terminal-conifer, 1,
+                                       0, 10, $terminal-green-phospor, 1);
+  }
+}
+
 // Set font-families
 .site-home, .site-nav, .site-footer {
   font-family: $nav-font-family;
@@ -169,11 +189,12 @@ a {
 }
 
 .page-nav {
-  ul.post-toc {
+  ul.toc {
     color: $terminal-orange-peel;
     position: relative; //change to fixed
-    top: 3em;
+    top: 6em;
     li {
+      position: fixed;
       a {
         color: $terminal-purple-light;
       }

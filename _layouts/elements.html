@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+	<html lang="{{ page.lang | default: site.lang | default: "en" }}">
+
+	{%- include head.html -%}
+
+
+		<body>
+
+			{% include nav_home.html %}
+			{% include navigation.html %}
+
+			<nav class="page-nav">
+        {% include toc.html html=content class="toc" %}
+			</nav>
+
+			<main class="mainContent" aria-label="Content">
+
+        <h1 class="page-title">{{ page.title }}</h1>
+        {{ content }}
+
+			</main>
+
+			<aside class="sideNotes">
+			</aside>
+
+			{% include footer.html %}
+
+			<script>
+		MathJax = {
+			tex: {
+				inlineMath: [['$', '$'], ['\\(', '\\)']],
+			  displayMath: [             // start/end delimiter pairs for display math
+	      ['$$', '$$'],
+	      ['\\[', '\\]']
+	    	]
+			},
+			svg: {
+				fontCache: 'global'
+			}
+		};
+		</script>
+		<!--script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script--->
+		</body>
+</html>

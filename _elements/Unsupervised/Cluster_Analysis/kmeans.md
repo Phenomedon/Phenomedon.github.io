@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: elements
 title: 'K-means Clustering'
 topic: 'Cluster Analysis'
 weight: 1
@@ -7,6 +7,8 @@ weight: 1
 asides:
   - The map is not the territory
 ---
+{% include shortcut_variables.html %}
+
 You've just loaded a fresh dataset. It's still so hot from transformation that
 your laptop fans haven't stopped whirring. After performing some basic visual
 inspection of the data, you wonder if some samples might be related to each
@@ -15,9 +17,10 @@ of underlying subset structure lurking in your data that would allow you to
 group them into different categories according to the attribute values taken by
 related samples.
 
-In other words, it's cluster hunting season.
+It's cluster hunting season.
 
-Clusters are like truffles. And like any good fungus hunter knows, the first
+Clusters are the truffles of your dataset, waiting to be found and finely grated
+over your analysis. And like any good fungus hunter knows, the first
 task is getting the right hog: one with a keen sense of smell, a lust tempered
 by perspicacity, a snout for rooting but a maw you can muzzle. Ok, I may have
 lost the thread of the analogy there, but the hogs we're talking about are
@@ -43,10 +46,68 @@ not, and how to tell the difference.
 One of the major sources of confusion about k-means can be traced to conflating
 the problem with the algorithm used to solve it.
 
-<div style="position: relative; width: 100%;">
- <div style="position: absolute; left: 100%; top: 0; transform:translateY(-50%)">
-   <aside style="width:100%;">This aside is in the right spot?</aside>
-</div>
+# K-Means Problem
+
+Let's go back to our hypothetical dataset. Hopefully your imaginary laptop's
+fans have spun down by now. Suppose there *is* some sort of meaningful, useful
+subset structure lurking in the data, just waiting to be discovered. Before we
+can find it, we need to decide how we will operationalize the distinguishing
+features of the subsets; in other words, what measurable characteristics will
+we use to differentiate one cluster from another?
+
+From a statistical point of view, an obvious choice to characterize
+subpopulations is the mean of each subpopulation. Means are easy to compute.
+Furthermore, depending on the true underling cluster structure and what we plan
+to do with it, using only the means to characterize each cluster could be
+sufficient in a statistical sense - the information bottleneck imposed by using
+these single parameter cluster summaries could be immaterial to our purposes.
+{{begin_aside}}
+Recall that a statistic is <def>sufficient</def> relative to an unknown
+parameter of a particular statistical model if no other quantity computed from
+a sample could provide any more information about the unknown parameter. The
+notion of an <def>information bottleneck</def> is a related information
+theoretic concept that quantifies how much information is lost about the
+parameter of interest by using a particular statistic. In a certain sense, the
+information bottleneck generalizes the concept of a sufficient statistic from
+the perspective of lossy compression.
+{{end_aside}}
+
+An elegant weapon for a more civilized age. But now we have new issues to
+address:
+ - How many means do we need to estimate?
+ - How are we going to estimate those means?
+
+The 'k' in 'k-means' is the answer to the first question. We assume we know how
+many clusters there are a priori. Of course, this assumption is artificial, as in
+practice if we knew how many clusters there were beforehand we'd already know
+a lot about the underlying structure of our data. A similar complaint is often
+raised by astute observers first learning about the Z-test: if we already know
+the population variance, then we must also know the population mean since we've
+measured the whole population. Similarly, knowing precisely how many clusters
+are in our dataset would imply some significant knowledge of the underlying
+subset structure of our dataset, which should make us question why we would need
+to perform cluster analysis in the first place. Estimating k when it is
+unknown is a separate issue that we'll come back to later.
+
+In order to deal with the second issue, we'll use a standard property of the
+mean: it is the unique minimizer of the mean square error to all the sample points.
+Formally, given a set of $n$ observations $\\{x_{i}\\}_{i = 1}^{n}$, the constant
+that uniquely minimizes the mean of the squared errors to each observation is
+the mean $m$
+
+<div>
+$$
+\begin{align}
+m = \arg\min_{c} \frac{1}{n}\sum_{i = 1}^{n}\vert\vert x_{i} - c \vert\vert_{2}^{2}
+\end{align}
+$$
 </div>
 
-# K-Means Problem
+So we now have an objective function to use for estimating a cluster's mean.
+Now we encounter another problem - we need to know which points belong to
+each cluster in order to use just those points to estimate each cluster mean.
+But of course, if we knew which points belonged to each cluster, we wouldn't
+need to do any damn cluster analysis in the first place. In order to address
+this dilemma, we incorporate the cluster assignment information into our
+objective function: we seek the assignment of points to clusters that minimizes
+the *within cluster* sum of squares error over all cluster assignments. 
