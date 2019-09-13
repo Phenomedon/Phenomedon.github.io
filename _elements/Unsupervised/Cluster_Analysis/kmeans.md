@@ -92,7 +92,7 @@ unknown is a separate issue that we'll come back to later.
 
 In order to deal with the second issue, we'll use a standard property of the
 mean: it is the unique minimizer of the mean square error to all the sample points.
-Formally, given a set of $n$ observations $\\{x_{i}\\}_{i = 1}^{n}$, the constant
+Formally, given a set of <span>$n$</span> observations $\\{x_{i}\\}_{i = 1}^{n}$, the constant
 that uniquely minimizes the mean of the squared errors to each observation is
 the mean $m$
 
