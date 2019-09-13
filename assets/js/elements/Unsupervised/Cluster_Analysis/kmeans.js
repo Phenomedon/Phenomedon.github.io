@@ -198,7 +198,7 @@ var circles = svg.append("g")
                     return yScale(d[1]);
                    })
                    .attr("r", 1)
-                   .attr("fill", "black");
+                   .attr("fill", "white");
 // Step 2
 
 // Set initial cluster centroids
@@ -361,7 +361,7 @@ var lines = svg.append("g")
                .transition("cluster-update")
                .delay(waitClusterDecompose)
                .duration(fillCentroidShift)
-               .attr("fill", "black");
+               .attr("fill", "white");
 
         currentCentroids = newCentroids;
 /*
@@ -548,7 +548,7 @@ var t = d3.interval(function(){
                          .transition("cluster-update")
                          .delay(waitClusterDecompose)
                          .duration(fillCentroidShift)
-                         .attr("fill", "black");
+                         .attr("fill", "white");
 
 
 
