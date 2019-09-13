@@ -1,0 +1,55 @@
+---
+layout: default
+title: Elements
+---
+	<h1 class="page-title">{{ page.title }}</h1>
+	<p>
+		The <dfn>elements of data science</dfn> refers here to the
+		foundational theory and methods of statistical and machine learning.
+	</p>
+
+	<p>
+	  Because of the intrinsically interdisciplinary nature of the subject, these
+		foundations draw from numerous related fields: . The categorization here
+		therefore represents only one possible, but hopefully coherent,
+		systematization.
+	</p>
+
+	<h1> Unsupervised Learning </h1>
+	<ul>
+
+	<li><h2> Cluster Analysis </h2></li>
+	<ul>
+		{% assign cluster_analysis = site.elements | where: "topic", "Cluster Analysis" | sort: "weight" %}
+		{% for element in cluster_analysis %}
+		  <div class="cluster-topic">
+	    <li> »
+				<a class="underline-glow" href="{{ element.url }}" title="{{ element.title }}">{{ element.title }}</a>
+			</li>
+			</div>
+	  {% endfor %}
+	</ul>
+	<li><h2> Signal Decomposition and Dimensionality Reduction </h2></li>
+	<ul>
+		{% assign decomposition_projection = site.elements | where: "topic", "Signal Decomposition and Dimensionality Reduction" | sort: "weight" %}
+		{% for element in decomposition_projection %}
+		  <div class="decomposition-projection-topic">
+	    <li> »
+				<a class="underline-glow" href="{{ element.url }}" title="{{ element.title }}">{{ element.title }}</a>
+			</li>
+			</div>
+	  {% endfor %}
+	</ul>
+	<li><h2> Rule Induction </h2></li>
+	<ul>
+		{% assign rule_induction = site.elements | where: "topic", "Rule Induction" | sort: "weight" %}
+		{% for element in rule_induction %}
+		  <div class="rule-induction-topic">
+	    <li> »
+				<a class="underline-glow" href="{{ element.url }}" title="{{ element.title }}">{{ element.title }}</a>
+			</li>
+			</div>
+	  {% endfor %}
+	</ul>
+
+	</ul>

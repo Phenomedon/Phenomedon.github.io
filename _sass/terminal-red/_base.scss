@@ -167,7 +167,14 @@ pre {
   }
 }
 
-// Set icon defaults
+// Set logo icon defaults
+.svg-logo {
+    width: 150px;
+    height: 0.9619140625*150px;
+    display: inline-block;
+}
+
+// Set footer icon defaults
 .svg-icon {
     width: 30px;
     height: 30px;

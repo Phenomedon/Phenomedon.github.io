@@ -19,6 +19,11 @@ linkedin_username: don-Walpola
 kaggle_username: robonimo86
 stackoverflow_username: "users/218088/"
 
+# Collections structure
+collections:
+  elements:
+    output: true
+    permalink: /elements/:path/
 
 # Build settings
 markdown: kramdown
