@@ -99,7 +99,7 @@ unknown is a separate issue that we'll come back to later.
 
 In order to deal with the second issue, we'll use a standard property of the
 mean: it is the unique minimizer of the mean square error to all the sample points.
-Formally, for a random sample of <mjx-container>\(n\)</mjx-container> observations <mjx-container>\(\\{x_{i}\\}_{i = 1}^{n}\)</mjx-container>,
+Formally, for a random sample of <mjx-container>\(n\)</mjx-container> observations <mjx-container>\( \{x_{i} \}_{i = 1}^{n}\)</mjx-container>,
 the constant (vector) that uniquely minimizes the expected sum of the squared
 errors to each observation is the mean <mjx-container>\(\mu\)</mjx-container>:
 
