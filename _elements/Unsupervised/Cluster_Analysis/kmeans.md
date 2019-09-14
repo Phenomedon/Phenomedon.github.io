@@ -100,15 +100,9 @@ unknown is a separate issue that we'll come back to later.
 
 In order to deal with the second issue, we'll use a standard property of the
 mean: it is the unique minimizer of the mean square error to all the sample points.
-<<<<<<< HEAD
 Formally, for a random sample of $n$ observations $\\{x_{i}\\}_{i = 1}^{n}$,
 the constant (vector) that uniquely minimizes the mean of the squared errors to
 each observation is the mean $\mu$:
-=======
-Formally, given a set of <span>$n$</span> observations $\\{x_{i}\\}_{i = 1}^{n}$, the constant
-that uniquely minimizes the mean of the squared errors to each observation is
-the mean $m$
->>>>>>> 2f5529594a9cd0846c847965d0f23caee25ad4f2
 
 <div>
 $$
@@ -119,7 +113,6 @@ $$
 $$
 </div>
 
-<<<<<<< HEAD
 We now have an objective function to use for estimating a cluster's mean.
 But this isn't good enough - in order to estimate a cluster's mean using the
 average of all data points belonging only to that cluster, we need to first know
@@ -132,16 +125,6 @@ all cluster assignments $\mathcal{P}$.
 <div>
 $$\argmin_{\mathbf{P}\in\mathcal{P}}\sum_{j = 1}^{k}\sum_{x \in P_{j}}\vert\vert x - \mu_{j}\vert\vert_{2}^{2}$$
 </div>
-=======
-So we now have an objective function to use for estimating a cluster's mean.
-Now we encounter another problem - we need to know which points belong to
-each cluster in order to use just those points to estimate each cluster mean.
-But of course, if we knew which points belonged to each cluster, we wouldn't
-need to do any damn cluster analysis in the first place. In order to address
-this dilemma, we incorporate the cluster assignment information into our
-objective function: we seek the assignment of points to clusters that minimizes
-the *within cluster* sum of squares error over all cluster assignments.
->>>>>>> 2f5529594a9cd0846c847965d0f23caee25ad4f2
 
 <script src="/assets/js/d3.js"></script>
 <script src="/assets/js/elements/Unsupervised/Cluster_Analysis/kmeans.js"></script>
