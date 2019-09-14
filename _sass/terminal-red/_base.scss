@@ -143,6 +143,11 @@ blockquote {
   }
 }
 
+// Inline elements styling
+dfn {
+  font-style: italic;
+}
+
 // Set code formatting defaults
 pre,
 code {

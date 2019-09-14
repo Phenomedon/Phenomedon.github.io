@@ -39,6 +39,7 @@
 
 // Main content box
 .mainContent {
+  display: grid;
   font-size: 2rem;
   p {
     strong {
@@ -200,6 +201,11 @@ a {
       }
     }
   }
+}
+
+// D3 styling
+#top-plot {
+  justify-self: center;
 }
 
 // Blog page

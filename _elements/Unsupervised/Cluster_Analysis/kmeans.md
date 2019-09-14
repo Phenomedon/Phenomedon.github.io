@@ -50,23 +50,29 @@ the problem with the algorithm used to solve it.
 # K-Means Problem
 
 Let's go back to our hypothetical dataset. Hopefully your imaginary laptop's
-fans have spun down by now. Suppose there *is* some sort of meaningful, useful
-subset structure lurking in the data, just waiting to be discovered. Before we
-can find it, we need to decide how we will operationalize the distinguishing
-features of the subsets; in other words, what measurable characteristics will
-we use to differentiate one cluster from another?
+fans have spun down by now. To make things more concrete, we'll say that we have
+$n$ data points, each of which has $d$ features, and each feature is a real
+number; more succinctly, each data point $x_{i}$ is a $d$-dimensional real
+vector for $1 \leq i \leq n$.
+
+Now suppose there *is* some sort of meaningful, useful subset structure lurking
+in the data, just waiting to be discovered. Before we can find it, we need to
+decide how we will operationalize the distinguishing features of the subsets;
+in other words, what measurable characteristics will we use to differentiate
+one cluster from another?
 
 From a statistical point of view, an obvious choice to characterize
-subpopulations is the mean of each subpopulation. Means are easy to compute.
-Furthermore, depending on the true underling cluster structure and what we plan
-to do with it, using only the means to characterize each cluster could be
-sufficient in a statistical sense - the information bottleneck imposed by using
-these single parameter cluster summaries could be immaterial to our purposes.
+subpopulations is the average, or mean, of each subpopulation. Means are easy
+to compute. Furthermore, depending on the true underling cluster structure and
+what we plan to do with it, using only the means to characterize each cluster
+could be sufficient in a statistical sense - the information bottleneck imposed
+by using these single parameter cluster summaries could be immaterial to our
+purposes.
 {{begin_aside}}
-Recall that a statistic is <def>sufficient</def> relative to an unknown
+Recall that a statistic is <dfn>sufficient</dfn> relative to an unknown
 parameter of a particular statistical model if no other quantity computed from
 a sample could provide any more information about the unknown parameter. The
-notion of an <def>information bottleneck</def> is a related information
+notion of an <dfn>information bottleneck</dfn> is a related information
 theoretic concept that quantifies how much information is lost about the
 parameter of interest by using a particular statistic. In a certain sense, the
 information bottleneck generalizes the concept of a sufficient statistic from
@@ -81,37 +87,44 @@ address:
 The 'k' in 'k-means' is the answer to the first question. We assume we know how
 many clusters there are a priori. Of course, this assumption is artificial, as in
 practice if we knew how many clusters there were beforehand we'd already know
-a lot about the underlying structure of our data. A similar complaint is often
+a lot about the underlying structure of our data.
+{{begin_aside}} A similar complaint is often
 raised by astute observers first learning about the Z-test: if we already know
 the population variance, then we must also know the population mean since we've
 measured the whole population. Similarly, knowing precisely how many clusters
 are in our dataset would imply some significant knowledge of the underlying
 subset structure of our dataset, which should make us question why we would need
-to perform cluster analysis in the first place. Estimating k when it is
+to perform cluster analysis in the first place. {{end_aside}}
+Estimating k when it is
 unknown is a separate issue that we'll come back to later.
 
 In order to deal with the second issue, we'll use a standard property of the
 mean: it is the unique minimizer of the mean square error to all the sample points.
-Formally, given a set of $n$ observations $\\{x_{i}\\}_{i = 1}^{n}$, the constant
-that uniquely minimizes the mean of the squared errors to each observation is
-the mean $m$
+Formally, for a random sample of $n$ observations $\\{x_{i}\\}_{i = 1}^{n}$,
+the constant (vector) that uniquely minimizes the mean of the squared errors to
+each observation is the mean $\mu$:
 
 <div>
 $$
+\DeclareMathOperator*{\argmin}{arg\,min}
 \begin{align}
-m = \arg\min_{c} \frac{1}{n}\sum_{i = 1}^{n}\vert\vert x_{i} - c \vert\vert_{2}^{2}
+\mu = \argmin_{c \in \mathbb{R}^{d}} \frac{1}{n}\sum_{i = 1}^{n}\vert\vert x_{i} - c \vert\vert_{2}^{2}
 \end{align}
 $$
 </div>
 
-So we now have an objective function to use for estimating a cluster's mean.
-Now we encounter another problem - we need to know which points belong to
-each cluster in order to use just those points to estimate each cluster mean.
-But of course, if we knew which points belonged to each cluster, we wouldn't
-need to do any damn cluster analysis in the first place. In order to address
-this dilemma, we incorporate the cluster assignment information into our
-objective function: we seek the assignment of points to clusters that minimizes
-the *within cluster* sum of squares error over all cluster assignments.
+We now have an objective function to use for estimating a cluster's mean.
+But this isn't good enough - in order to estimate a cluster's mean using the
+average of all data points belonging only to that cluster, we need to first know
+which data points belong to that cluster. Of course, if we knew which points
+belonged to each cluster, we wouldn't need to do any damn cluster analysis in
+the first place! In order to address this dilemma, we incorporate the cluster
+assignment information into our objective function: we seek the assignment of
+points to clusters that minimizes the *within cluster* sum of squares error over
+all cluster assignments $\mathcal{P}$.
+<div>
+$$\argmin_{\mathbf{P}\in\mathcal{P}}\sum_{j = 1}^{k}\sum_{x \in P_{j}}\vert\vert x - \mu_{j}\vert\vert_{2}^{2}$$
+</div>
 
-<script src="../../../assets/js/d3.js"></script>
-<script src="../../../assets/js/elements/Unsupervised/Cluster_Analysis/kmeans.js"></script>
+<script src="/assets/js/d3.js"></script>
+<script src="/assets/js/elements/Unsupervised/Cluster_Analysis/kmeans.js"></script>

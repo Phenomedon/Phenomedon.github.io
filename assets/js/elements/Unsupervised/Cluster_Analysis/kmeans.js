@@ -128,7 +128,7 @@ var maxSteps = 3;
 var threshold = 0.1;
 
 // Load data
-var a1 = d3.csv("../../../../../datasets/elements/Unsupervised/Cluster_Analysis/kmeans/a0.csv", rowConverter);
+var a1 = d3.csv("/assets/datasets/elements/Unsupervised/Cluster_Analysis/kmeans/a0.csv", rowConverter);
 
 
 
@@ -198,7 +198,7 @@ var circles = svg.append("g")
                     return yScale(d[1]);
                    })
                    .attr("r", 1)
-                   .attr("fill", "black");
+                   .attr("fill", "white");
 // Step 2
 
 // Set initial cluster centroids
@@ -361,7 +361,7 @@ var lines = svg.append("g")
                .transition("cluster-update")
                .delay(waitClusterDecompose)
                .duration(fillCentroidShift)
-               .attr("fill", "black");
+               .attr("fill", "white");
 
         currentCentroids = newCentroids;
 /*
@@ -548,7 +548,7 @@ var t = d3.interval(function(){
                          .transition("cluster-update")
                          .delay(waitClusterDecompose)
                          .duration(fillCentroidShift)
-                         .attr("fill", "black");
+                         .attr("fill", "white");
 
 
 
