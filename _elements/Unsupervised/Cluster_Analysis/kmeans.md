@@ -101,30 +101,59 @@ unknown is a separate issue that we'll come back to later.
 In order to deal with the second issue, we'll use a standard property of the
 mean: it is the unique minimizer of the mean square error to all the sample points.
 Formally, for a random sample of $n$ observations $\\{x_{i}\\}_{i = 1}^{n}$,
-the constant (vector) that uniquely minimizes the mean of the squared errors to
-each observation is the mean $\mu$:
+the constant (vector) that uniquely minimizes the expected sum of the squared
+errors to each observation is the mean $\mu$:
 
 <div>
 $$
 \DeclareMathOperator*{\argmin}{arg\,min}
 \begin{align}
-\mu = \argmin_{c \in \mathbb{R}^{d}} \frac{1}{n}\sum_{i = 1}^{n}\vert\vert x_{i} - c \vert\vert_{2}^{2}
+\mu = \argmin_{c \in \mathbb{R}^{d}} E\bigg[\sum_{i = 1}^{n}\vert\vert x_{i} - c \vert\vert_{2}^{2}\bigg]
 \end{align}
 $$
 </div>
+We want to apply this property of means not to the whole data set, but to
+each of our $k$ clusters individually. So for the $j^{th}$ cluster $P_{j}$, we
+want to use just the mean $\mu_{j}$ of that cluster.
 
-We now have an objective function to use for estimating a cluster's mean.
+<div>
+$$
+\mu_{j} = \argmin_{c \in \mathbb{R}^{d}} E\bigg[\sum_{x \in P_{j}}\vert\vert x - c \vert\vert_{2}^{2}\bigg]
+$$
+</div>
+
+The main thing to notice here is that now our sum only runs over points in the
+$j^{th}$ cluster $P_{j}$ rather than all $n$ points.
+
+We now have an objective function for each cluster. Since we don't know the
+true mean $\mu_{j}$ for each cluster $P_{j}$, we have to estimate it using our
+data. If you're worth your salt doing this, you know that the sample average is an
+unbiased estimator of the population mean. So we just need to take the average
+of all the points in cluster $P_{j}$, and we'll have our estimate for $\mu_{j}$.
+<div>
+$$
+\bar{x}_{j} = \frac{1}{|P_{j}|}\sum_{x \in P_{j}}x
+$$
+</div>
 But this isn't good enough - in order to estimate a cluster's mean using the
 average of all data points belonging only to that cluster, we need to first know
 which data points belong to that cluster. Of course, if we knew which points
 belonged to each cluster, we wouldn't need to do any damn cluster analysis in
 the first place! In order to address this dilemma, we incorporate the cluster
 assignment information into our objective function: we seek the assignment of
-points to clusters that minimizes the *within cluster* sum of squares error over
-all cluster assignments $\mathcal{P}$.
+points to clusters that minimizes the total *within cluster* sum of squares
+error over all cluster assignments <mjx-container>\(\mathcal{P}\)</mjx-container>.
+That is, out of all partitions
+$\mathcal{P}$ of our data into $k$ non-empty subsets
+$\mathbf{P} = \{P_{1}, P_{2}, \dots P_{k}\}$, we want to find a particular
+partition $\mathbf{P}_{0}$ that minimizes the overall sum of squared errors,
 <div>
-$$\argmin_{\mathbf{P}\in\mathcal{P}}\sum_{j = 1}^{k}\sum_{x \in P_{j}}\vert\vert x - \mu_{j}\vert\vert_{2}^{2}$$
+$$P_{0} = \argmin_{\mathbf{P}\in\mathcal{P}}\sum_{j = 1}^{k}\sum_{x \in P_{j}}\vert\vert x - \mu_{j}\vert\vert_{2}^{2}.$$
 </div>
+Sounds simple enough, right? All we have to do is try out all the different ways
+to split our data into $k$ clusters, and find one that gives us the smallest
+total when we add up the sum of square errors within each cluster.
+
 
 <script src="/assets/js/d3.js"></script>
 <script src="/assets/js/elements/Unsupervised/Cluster_Analysis/kmeans.js"></script>
