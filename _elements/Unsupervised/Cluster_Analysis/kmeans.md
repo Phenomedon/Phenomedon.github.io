@@ -50,10 +50,9 @@ the problem with the algorithm used to solve it.
 # K-Means Problem
 
 Let's go back to our hypothetical dataset. Hopefully your imaginary laptop's
-fans have spun down by now. To make things more concrete, we'll say that we have
-$n$ data points, each of which has $d$ features, and each feature is a real
-number; more succinctly, each data point $x_{i}$ is a $d$-dimensional real
-vector for $1 \leq i \leq n$.
+fans have spun down by now. To make things more concrete, we'll say that we have <mjx-container>\(n\)</mjx-container> data points, each of which has <mjx-container>\(d\)</mjx-container> features, and each feature is a real
+number; more succinctly, each data point <mjx-container>\(x_{i}\)</mjx-container> is a <mjx-container>\(d\)</mjx-container>-dimensional real
+vector for <mjx-container>\(1 \leq i \leq n\)</mjx-container>.
 
 Now suppose there *is* some sort of meaningful, useful subset structure lurking
 in the data, just waiting to be discovered. Before we can find it, we need to
@@ -63,13 +62,8 @@ one cluster from another?
 
 From a statistical point of view, an obvious choice to characterize
 subpopulations is the average, or mean, of each subpopulation. Means are easy
-to compute. Furthermore, depending on the true underling cluster structure and
-what we plan to do with it, using only the means to characterize each cluster
-could be sufficient in a statistical sense - the information bottleneck imposed
-by using these single parameter cluster summaries could be immaterial to our
-purposes.
-{{begin_aside}}
-Recall that a statistic is <dfn>sufficient</dfn> relative to an unknown
+to compute.
+{{begin_aside}} Recall that a statistic is <dfn>sufficient</dfn> relative to an unknown
 parameter of a particular statistical model if no other quantity computed from
 a sample could provide any more information about the unknown parameter. The
 notion of an <dfn>information bottleneck</dfn> is a related information
@@ -78,6 +72,11 @@ parameter of interest by using a particular statistic. In a certain sense, the
 information bottleneck generalizes the concept of a sufficient statistic from
 the perspective of lossy compression.
 {{end_aside}}
+Furthermore, depending on the true underling cluster structure and
+what we plan to do with it, using only the means to characterize each cluster
+could be sufficient in a statistical sense - the information bottleneck imposed
+by using these single parameter cluster summaries could be immaterial to our
+purposes.
 
 An elegant weapon for a more civilized age. But now we have new issues to
 address:
@@ -85,9 +84,9 @@ address:
  - How are we going to estimate those means?
 
 The 'k' in 'k-means' is the answer to the first question. We assume we know how
-many clusters there are a priori. Of course, this assumption is artificial, as in
-practice if we knew how many clusters there were beforehand we'd already know
-a lot about the underlying structure of our data.
+many clusters there are <i class="latin">a priori</i>. Of course, this
+assumption is artificial, as in practice if we knew how many clusters there were
+beforehand we'd already know a lot about the underlying structure of our data.
 {{begin_aside}} A similar complaint is often
 raised by astute observers first learning about the Z-test: if we already know
 the population variance, then we must also know the population mean since we've
@@ -100,9 +99,9 @@ unknown is a separate issue that we'll come back to later.
 
 In order to deal with the second issue, we'll use a standard property of the
 mean: it is the unique minimizer of the mean square error to all the sample points.
-Formally, for a random sample of $n$ observations $\\{x_{i}\\}_{i = 1}^{n}$,
+Formally, for a random sample of <mjx-container>\(n\)</mjx-container> observations <mjx-container>\(\\{x_{i}\\}_{i = 1}^{n}\)</mjx-container>,
 the constant (vector) that uniquely minimizes the expected sum of the squared
-errors to each observation is the mean $\mu$:
+errors to each observation is the mean <mjx-container>\(\mu\)</mjx-container>:
 
 <div>
 $$
@@ -113,8 +112,8 @@ $$
 $$
 </div>
 We want to apply this property of means not to the whole data set, but to
-each of our $k$ clusters individually. So for the $j^{th}$ cluster $P_{j}$, we
-want to use just the mean $\mu_{j}$ of that cluster.
+each of our <mjx-container>\(k\)</mjx-container> clusters individually. So for the <mjx-container>\(j^{th}\)</mjx-container> cluster <mjx-container>\(P_{j}\)</mjx-container>, we
+want to use just the mean <mjx-container>\(\mu_{j}\) of that cluster.
 
 <div>
 $$
@@ -122,14 +121,14 @@ $$
 $$
 </div>
 
-The main thing to notice here is that now our sum only runs over points in the
-$j^{th}$ cluster $P_{j}$ rather than all $n$ points.
+The main thing to notice here is that now our sum only runs over points in the <mjx-container>\(j^{th}\)</mjx-container>
+cluster <mjx-container>\(P_{j}\)</mjx-container> rather than all <mjx-container>\(n\)</mjx-container> points.
 
 We now have an objective function for each cluster. Since we don't know the
-true mean $\mu_{j}$ for each cluster $P_{j}$, we have to estimate it using our
+true mean <mjx-container>\(\mu_{j}\)</mjx-container> for each cluster <mjx-container>\(P_{j}\)</mjx-container>, we have to estimate it using our
 data. If you're worth your salt doing this, you know that the sample average is an
 unbiased estimator of the population mean. So we just need to take the average
-of all the points in cluster $P_{j}$, and we'll have our estimate for $\mu_{j}$.
+of all the points in cluster <mjx-container>\(P_{j}\)</mjx-container>, and we'll have our estimate for <mjx-container>\(\mu_{j}\)</mjx-container>.
 <div>
 $$
 \bar{x}_{j} = \frac{1}{|P_{j}|}\sum_{x \in P_{j}}x
@@ -143,17 +142,28 @@ the first place! In order to address this dilemma, we incorporate the cluster
 assignment information into our objective function: we seek the assignment of
 points to clusters that minimizes the total *within cluster* sum of squares
 error over all cluster assignments <mjx-container>\(\mathcal{P}\)</mjx-container>.
-That is, out of all partitions
-$\mathcal{P}$ of our data into $k$ non-empty subsets
-$\mathbf{P} = \{P_{1}, P_{2}, \dots P_{k}\}$, we want to find a particular
-partition $\mathbf{P}_{0}$ that minimizes the overall sum of squared errors,
+That is, out of all partitions <mjx-container>\(\mathcal{P}\)</mjx-container> of our data into <mjx-container>\(k\)</mjx-container> non-empty subsets <mjx-container>\(\mathbf{P} = \{P_{1}, P_{2}, \dots P_{k}\}\)</mjx-container>, we want to find a particular
+partition <mjx-container>\(\mathbf{P}_{0}\)</mjx-container> that minimizes the overall sum of squared errors,
 <div>
 $$P_{0} = \argmin_{\mathbf{P}\in\mathcal{P}}\sum_{j = 1}^{k}\sum_{x \in P_{j}}\vert\vert x - \bar{x}_{j}\vert\vert_{2}^{2}.$$
 </div>
 Sounds simple enough, right? All we have to do is try out all the different ways
-to split our data into $k$ clusters, and find one that gives us the smallest
+to split our data into <mjx-container>\(k\)</mjx-container> clusters, and find one that gives us the smallest
 total when we add up the sum of square errors within each cluster.
 
+Well I hope you've got a lot of free time, because the number of possible
+partitions is *huge*. How huge? The Stirling numbers of the second kind count
+the number of ways to partition a set of <mjx-container>\(n\)</mjx-container> objects into <mjx-container>\(k\)</mjx-container> non-empty subsets.
+For a given <mjx-container>\(n\)</mjx-container> and <mjx-container>\(k\)</mjx-container>, the corresponding Stirling number of the second kind is
+denoted by <mjx-container>\(n \brace k\)</mjx-container>, is given by the
+formula
+<div>
+$$
+{n \brace k} = \frac{1}{k!}\sum_{i=0}^{k}(-1)^{i}\binom{k}{i}(k - i)^{n}.
+$$
+</div>
+See those factorials and binomial coefficients? Turns out we're dealing with
+**super-exponential** growth. 
 
 <script src="/assets/js/d3.js"></script>
 <script src="/assets/js/elements/Unsupervised/Cluster_Analysis/kmeans.js"></script>

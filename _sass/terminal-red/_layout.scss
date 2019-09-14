@@ -40,7 +40,7 @@
 // Main content box
 .mainContent {
   display: grid;
-  font-size: 2rem;
+  font-size: 1.6rem;
   p {
     strong {
       color: $terminal-purple-light;
@@ -198,6 +198,10 @@ a {
       position: fixed;
       a {
         color: $terminal-purple-light;
+        @include text-bordered-triple-fuzz(0.5, 1, $yellow, 0.1,
+                                           0, 2.5, $terminal-vermilion, 1,
+                                           0, 5, $terminal-orange-peel, 1,
+                                           0, 10, $terminal-vermilion, 1);
       }
     }
   }
