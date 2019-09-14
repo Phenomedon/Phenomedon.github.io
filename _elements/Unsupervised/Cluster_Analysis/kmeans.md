@@ -148,7 +148,7 @@ $\mathcal{P}$ of our data into $k$ non-empty subsets
 $\mathbf{P} = \{P_{1}, P_{2}, \dots P_{k}\}$, we want to find a particular
 partition $\mathbf{P}_{0}$ that minimizes the overall sum of squared errors,
 <div>
-$$P_{0} = \argmin_{\mathbf{P}\in\mathcal{P}}\sum_{j = 1}^{k}\sum_{x \in P_{j}}\vert\vert x - \mu_{j}\vert\vert_{2}^{2}.$$
+$$P_{0} = \argmin_{\mathbf{P}\in\mathcal{P}}\sum_{j = 1}^{k}\sum_{x \in P_{j}}\vert\vert x - \bar{x}_{j}\vert\vert_{2}^{2}.$$
 </div>
 Sounds simple enough, right? All we have to do is try out all the different ways
 to split our data into $k$ clusters, and find one that gives us the smallest
