@@ -152,9 +152,13 @@ to split our data into <mjx-container>\(k\)</mjx-container> clusters, and find o
 total when we add up the sum of square errors within each cluster.
 
 Well I hope you've got a lot of free time, because the number of possible
-partitions is *huge*. How huge? The Stirling numbers of the second kind count
-the number of ways to partition a set of <mjx-container>\(n\)</mjx-container> objects into <mjx-container>\(k\)</mjx-container> non-empty subsets.
-For a given <mjx-container>\(n\)</mjx-container> and <mjx-container>\(k\)</mjx-container>, the corresponding Stirling number of the second kind is
+partitions is *huge*. How huge? Mathematically speaking, it makes Dwayne Johnson
+look like Kevin Hart - when he was five. The Stirling numbers of the second kind
+count the number of ways to partition a set
+of <mjx-container>\(n\)</mjx-container> objects
+into <mjx-container>\(k\)</mjx-container> non-empty subsets.
+For a given <mjx-container>\(n\)</mjx-container> and <mjx-container>\(k\)</mjx-container>,
+the corresponding Stirling number of the second kind,
 denoted by <mjx-container>\(n \brace k\)</mjx-container>, is given by the
 formula
 <div>
@@ -163,7 +167,7 @@ $$
 $$
 </div>
 See those factorials and binomial coefficients? Turns out we're dealing with
-**super-exponential** growth. 
+**super-exponential** growth.
 
 <script src="/assets/js/d3.js"></script>
 <script src="/assets/js/elements/Unsupervised/Cluster_Analysis/kmeans.js"></script>
