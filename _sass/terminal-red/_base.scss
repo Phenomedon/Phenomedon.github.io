@@ -34,9 +34,9 @@ body {
             font-feature-settings: "kern" 1;
     font-kerning: normal;
     @include text-bordered-triple-fuzz(0.5, 1, $yellow, 0.1,
-                                       0, 2.5, $terminal-vermilion, 0,
-                                       0, 5, $terminal-orange-peel, 0,
-                                       0, 10, $terminal-vermilion, 0);
+                                       0, 2.5, $terminal-vermilion, 0.3,
+                                       0, 5, $terminal-orange-peel, 0.2,
+                                       0, 10, $terminal-vermilion, 0.1);
     //@include text-border(1, $yellow, 0.1, 0.5);
     margin: auto 10px;
 }

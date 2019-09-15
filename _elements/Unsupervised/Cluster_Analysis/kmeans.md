@@ -47,22 +47,23 @@ not, and how to tell the difference.
 One of the major sources of confusion about k-means can be traced to conflating
 the problem with the algorithm used to solve it.
 
-# K-Means Problem
+# The K-Means Problem
 
 Let's go back to our hypothetical dataset. Hopefully your imaginary laptop's
 fans have spun down by now. To make things more concrete, we'll say that we have <mjx-container>\(n\)</mjx-container> data points, each of which has <mjx-container>\(d\)</mjx-container> features, and each feature is a real
 number; more succinctly, each data point <mjx-container>\(x_{i}\)</mjx-container> is a <mjx-container>\(d\)</mjx-container>-dimensional real
 vector for <mjx-container>\(1 \leq i \leq n\)</mjx-container>.
 
-Now suppose there *is* some sort of meaningful, useful subset structure lurking
+Now suppose there *is*  some sort of meaningful, useful subset structure lurking
 in the data, just waiting to be discovered. Before we can find it, we need to
 decide how we will operationalize the distinguishing features of the subsets;
 in other words, what measurable characteristics will we use to differentiate
 one cluster from another?
 
+## Means to an End
 From a statistical point of view, an obvious choice to characterize
-subpopulations is the average, or mean, of each subpopulation. Means are easy
-to compute.
+subpopulations is the average, or mean, of each subpopulation. Sample means are
+easy to compute - just add and divide.
 {{begin_aside}} Recall that a statistic is <dfn>sufficient</dfn> relative to an unknown
 parameter of a particular statistical model if no other quantity computed from
 a sample could provide any more information about the unknown parameter. The
@@ -126,7 +127,7 @@ cluster <mjx-container>\(P_{j}\)</mjx-container> rather than all <mjx-container>
 
 We now have an objective function for each cluster. Since we don't know the
 true mean <mjx-container>\(\mu_{j}\)</mjx-container> for each cluster <mjx-container>\(P_{j}\)</mjx-container>, we have to estimate it using our
-data. If you're worth your salt doing this, you know that the sample average is an
+data. If you're worth your salt doing this, you know that the sample average {{ils}}\bar{x}{{ile}} is an
 unbiased estimator of the population mean. So we just need to take the average
 of all the points in cluster <mjx-container>\(P_{j}\)</mjx-container>, and we'll have our estimate for <mjx-container>\(\mu_{j}\)</mjx-container>.
 <div>
@@ -139,35 +140,108 @@ average of all data points belonging only to that cluster, we need to first know
 which data points belong to that cluster. Of course, if we knew which points
 belonged to each cluster, we wouldn't need to do any damn cluster analysis in
 the first place! In order to address this dilemma, we incorporate the cluster
-assignment information into our objective function: we seek the assignment of
-points to clusters that minimizes the total *within cluster* sum of squares
-error over all cluster assignments <mjx-container>\(\mathcal{P}\)</mjx-container>.
-That is, out of all partitions <mjx-container>\(\mathcal{P}\)</mjx-container> of our data into <mjx-container>\(k\)</mjx-container> non-empty subsets <mjx-container>\(\mathbf{P} = \{P_{1}, P_{2}, \dots P_{k}\}\)</mjx-container>, we want to find a particular
-partition <mjx-container>\(\mathbf{P}_{0}\)</mjx-container> that minimizes the overall sum of squared errors,
+assignment information into our objective function: assign points to clusters
+so that we minimize the *total within cluster* sum of square errors over all
+cluster assignments <mjx-container>\(\mathcal{P}\)</mjx-container>. That is, out
+of all partitions <mjx-container>\(\mathcal{P}\)</mjx-container> of our data
+into <mjx-container>\(k\)</mjx-container> non-empty
+subsets <mjx-container>\(\mathbf{P} = \{P_{1}, P_{2}, \dots P_{k}\}\)</mjx-container>,
+we want to find a particular partition <mjx-container>\(\mathbf{P}_{0}\)</mjx-container>
+that minimizes the overall sum of squared errors,
 <div>
-$$P_{0} = \argmin_{\mathbf{P}\in\mathcal{P}}\sum_{j = 1}^{k}\sum_{x \in P_{j}}\vert\vert x - \bar{x}_{j}\vert\vert_{2}^{2}.$$
+$$\mathbf{P}_{0} = \argmin_{\mathbf{P}\in\mathcal{P}}\sum_{j = 1}^{k}\sum_{x \in P_{j}}\vert\vert x - \bar{x}_{j}\vert\vert_{2}^{2}.$$
 </div>
 Sounds simple enough, right? All we have to do is try out all the different ways
 to split our data into <mjx-container>\(k\)</mjx-container> clusters, and find one that gives us the smallest
 total when we add up the sum of square errors within each cluster.
 
+## The Size of the Problem
 Well I hope you've got a lot of free time, because the number of possible
 partitions is *huge*. How huge? Mathematically speaking, it makes Dwayne Johnson
-look like Kevin Hart - when he was five. The Stirling numbers of the second kind
-count the number of ways to partition a set
+look like Kevin Hart - when he was five. The <dfn>Stirling numbers of the second
+kind</dfn> count the number of ways to partition a set
 of <mjx-container>\(n\)</mjx-container> objects
 into <mjx-container>\(k\)</mjx-container> non-empty subsets.
 For a given <mjx-container>\(n\)</mjx-container> and <mjx-container>\(k\)</mjx-container>,
 the corresponding Stirling number of the second kind,
 denoted by <mjx-container>\(n \brace k\)</mjx-container>, is given by the
 formula
+{{begin_aside}}
+The Stirling numbers of the second kind count the number of non-empty partitions
+&mdash; every subset has to contain at least one point. This restriction is fine
+for the k-means problem, but some algorithms that solve k-means may run into
+issues of empty clusters.
+{{end_aside}}
 <div>
 $$
 {n \brace k} = \frac{1}{k!}\sum_{i=0}^{k}(-1)^{i}\binom{k}{i}(k - i)^{n}.
 $$
 </div>
 See those factorials and binomial coefficients? Turns out we're dealing with
-**super-exponential** growth.
+**super-exponential** growth. For <mjx-container>\( n \geq 2\)</mjx-container>
+and {{ils}} 1 \leq k \leq n - 1 {{ile}}, we have the following lower and upper
+bounds on these Stirling numbers:
+<div>
+$$
+\frac{1}{2}(k^2 + k + 2)k^{n-k-1} - 1 \leq {n \brace k} \leq \frac{1}{2}\binom{n}{k}k^{n-k}.
+$$
+</div>
+
+For a concrete example, if you have {{ils}}n = 100{{ile}} data points that you want to split
+into {{ils}}k = 3 {{ile}} clusters. You have
+<div>
+$$
+{100 \brace 3}  = 8.57 \times 10^{46}
+$$
+</div>
+different clusterings to try out. It's estimated that there are on the order
+of {{ils}} 10^{10} {{ile}} neurons in the average human cerebral cortex. Double
+the size of the dataset, and you've now got
+<div>
+$$
+{200 \brace 3} \approx 4.426 \times 10^{94}
+$$
+</div>
+cluster configurations to search through. The number of baryons in the
+observable universe is estimated to be on the order to {{ils}}10^{80}{{ile}}.
+Forget watching paint dry, you may as well try to observe proton decay.
+
+So, brute force is out. Any algorithm of practical use is going to need to be
+more sophisticated than arm wrestling with time.
+
+## Is the Mean Meaninful?
+At this point I'd like to draw attention to a subtle point: we assumed that
+using the cluster means is meaningful. Punning aside, we've actually made some
+assumptions about our data generating process by using the cluster means. First,
+we've assumed that a probabilistic model can provide useful results here, since
+we're using statistics to describe our data. So our data has to be either
+stochastically generated, or deterministically generated yet so complicated that
+statistical characterizations are accurate approximations. Second, the specific
+probabilistic model we are using is a mixture model. In order for the computed
+sample means to usefully characterize our clusters, the expected value of the
+component distribution characterizing each cluster has to exist. Obviously, if
+the population mean doesn't exist, the sample mean doesn't really capture any
+valid description of the cluster. What's worse, if even one cluster has such a
+pathological distribution, it can ruin our ability to describe the other
+clusters. And even if the components all have finite first moments, if the tails
+are fat enough that means 'barely' exist, unless we have a commensurately large
+sample the sample means we compute are extremely likely to misrepresent the data.
+While these concerns are usually paranoid delusions in practice, they cannot be
+universally disregarded. Besides the Cauchy distribution, the Pareto
+distribution does not have a finite expectation for certain parameter values.
+And for other parameter values, the expectation 'barely' exists. The Pareto
+distribution has been used to successfully model such varied processes as the
+sizes of human settlements and hard disk error rates, so it is not just a
+mathematical curiosity.
+
+# Lloyd's Algorithm
+
+The standard algorithm used to solve the k-means problem is often just called
+'the k-means algorithm.' I find this name misleading for two reasons: it makes
+it easier to confuse the problem posed with the method of solving it, and there
+is actually more than one algorithm that can solve the problem. In order to
+avoid both these issues, I'm going to use the original name from the computer
+science literature: Lloyd's algorithm. 
 
 <script src="/assets/js/d3.js"></script>
 <script src="/assets/js/elements/Unsupervised/Cluster_Analysis/kmeans.js"></script>
