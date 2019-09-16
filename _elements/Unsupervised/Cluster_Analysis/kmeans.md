@@ -11,38 +11,40 @@ asides:
 <div id="top-plot"></div>
 
 You've just loaded a fresh dataset. It's still so hot from transformation that
-your laptop fans haven't stopped whirring. After performing some basic visual
-inspection of the data, you wonder if some samples might be related to each
-other in terms of the values of their attributes. There might even be some sort
-of underlying subset structure lurking in your data that would allow you to
-group them into different categories according to the attribute values taken by
-related samples.
+your laptop fans haven't stopped whirring. After performing some basic
+inspection of the data, your eyes begin to glaze over and your face starts to
+go numb. If you want to keep exploring the data, you're going to need some
+patterns to hold on to before you pass out: market segments in consumer data,
+tissues in medical images, communities in social networks,
+topics in a text corpus. You could steady yourself on some underlying subset
+structure lurking in your data; you could group them into different categories
+according to the attribute values taken by related samples.
 
 It's cluster hunting season.
 
 Clusters are the truffles of your dataset, waiting to be found and finely grated
 over your analysis. And like any good fungus hunter knows, the first
 task is getting the right hog: one with a keen sense of smell, a lust tempered
-by perspicacity, a snout for rooting but a maw you can muzzle. Ok, I may have
+by perspicacity, a snout for rooting but a maw you can muzzle. The second task
+is not getting shot in the face by a paranoid French farmer. Ok, I may have
 lost the thread of the analogy there, but the hogs we're talking about are
 clustering methods. Very often, the first choice in clustering hogs is the
 granddaddy of 'em all - k-means clustering.
 
 Not only is k-means one of the oldest forms of cluster analysis, it is also one
-of the most widely used, and frequently the first approach to unsupervised
-learning taught. K-means' enduring popularity both in practice and pedagogy
-stems from the elegance in its simplicity. In my experience, this unfortunately
-also means that k-means is one of the most frequently misunderstood, poorly
-explained, and outright abused methods in machine learning. Granted, my personal
-experience, like anyone's, is statistically biased - no individual is an
-arbitrarily random sampler - but I have seen enough incorrect implementations
-and misleading characterizations to warrant address here. K-means may be elegant
-in its simplicity, but that doesn't excuse simplicity in the minds of those who
-use it.
+of the most widely used. And it's the first approach to unsupervised learning
+many budding datamancers encounter. K-means' enduring popularity both in
+practice and pedagogy stems from the elegance in its simplicity. In my
+experience, this unfortunately also means that k-means is one of the most
+frequently misunderstood, poorly explained, and outright abused methods in
+machine learning. Granted, my personal experience, like anyone's, is
+statistically biased - no individual is an arbitrarily random sampler - but I
+have seen enough incorrect implementations and misleading characterizations to
+warrant address here. K-means may be elegant in its simplicity, but that doesn't
+excuse simplicity in the minds of those who use it.
 
 In this article I aim to impart an appreciation for the nuances of k-means
-cluster analysis: what k-means actually is, when it is appropriate, when it is
-not, and how to tell the difference.
+cluster analysis: what it is, how it works, and when it breaks.
 
 One of the major sources of confusion about k-means can be traced to conflating
 the problem with the algorithm used to solve it.
@@ -84,7 +86,7 @@ address:
  - How many means do we need to estimate?
  - How are we going to estimate those means?
 
-The 'k' in 'k-means' is the answer to the first question. We assume we know how
+The 'k' in 'k-means' answers the first question. We assume we know how
 many clusters there are <i class="latin">a priori</i>. Of course, this
 assumption is artificial, as in practice if we knew how many clusters there were
 beforehand we'd already know a lot about the underlying structure of our data.
@@ -209,7 +211,7 @@ Forget watching paint dry, you may as well try to observe proton decay.
 So, brute force is out. Any algorithm of practical use is going to need to be
 more sophisticated than arm wrestling with time.
 
-## Is the Mean Meaninful?
+## Is the Mean Meaningful?
 At this point I'd like to draw attention to a subtle point: we assumed that
 using the cluster means is meaningful. Punning aside, we've actually made some
 assumptions about our data generating process by using the cluster means. First,
@@ -241,7 +243,7 @@ The standard algorithm used to solve the k-means problem is often just called
 it easier to confuse the problem posed with the method of solving it, and there
 is actually more than one algorithm that can solve the problem. In order to
 avoid both these issues, I'm going to use the original name from the computer
-science literature: Lloyd's algorithm. 
+science literature: Lloyd's algorithm.
 
 <script src="/assets/js/d3.js"></script>
 <script src="/assets/js/elements/Unsupervised/Cluster_Analysis/kmeans.js"></script>
