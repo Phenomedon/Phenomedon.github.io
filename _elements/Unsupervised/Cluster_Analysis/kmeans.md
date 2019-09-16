@@ -16,19 +16,19 @@ inspection of the data, your eyes begin to glaze over and your face starts to
 go numb. If you want to keep exploring the data, you're going to need some
 patterns to hold on to before you pass out: market segments in consumer data,
 tissues in medical images, communities in social networks,
-topics in a text corpus. You could steady yourself on some underlying subset
-structure lurking in your data; you could group them into different categories
+topics in a text corpus. If only you could steady yourself on some underlying
+subset structure lurking in your data, group them into different categories
 according to the attribute values taken by related samples.
 
 It's cluster hunting season.
 
-Clusters are the truffles of your dataset, waiting to be found and finely grated
+Clusters are the truffles in your dataset, waiting to be found and finely grated
 over your analysis. And like any good fungus hunter knows, the first
 task is getting the right hog: one with a keen sense of smell, a lust tempered
 by perspicacity, a snout for rooting but a maw you can muzzle. The second task
 is not getting shot in the face by a paranoid French farmer. Ok, I may have
 lost the thread of the analogy there, but the hogs we're talking about are
-clustering methods. Very often, the first choice in clustering hogs is the
+clustering methods. Very often, the first choice in cluster hogs is the
 granddaddy of 'em all - k-means clustering.
 
 Not only is k-means one of the oldest forms of cluster analysis, it is also one
@@ -198,7 +198,7 @@ $$
 </div>
 different clusterings to try out. It's estimated that there are on the order
 of {{ils}} 10^{10} {{ile}} neurons in the average human cerebral cortex. Double
-the size of the dataset, and you've now got
+the size of the dataset, and now you've got
 <div>
 $$
 {200 \brace 3} \approx 4.426 \times 10^{94}
