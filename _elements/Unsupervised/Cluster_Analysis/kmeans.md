@@ -261,6 +261,10 @@ mathematical curiosity.
 --->
 # K-Means Algorithms
 
+Since the space of possible solutions is generally superexponential in the
+cluster number and dataset size, all commonly used algorithms applied to the
+k-means problem are heuristic in nature.
+
 ## Lloyd's Algorithm
 
 The standard algorithm used to solve the k-means problem is often just called
@@ -279,32 +283,104 @@ produced is only guaranteed to be 'locally' optimal in a sense that we'll see
 later.
 
 The simplicity of Lloyd's algorithm is in large part responsible for the
-ubiquity of k-means in cluster analysis. In it's most basic form, Lloyd's
+ubiquity of k-means in cluster analysis. In it's simplest form, Lloyd's
 algorithm is as follows:
-{% include pseudocode.html id="Lloyd" code="
-**Input:** positive integer k, dataset {x} \subset R^{d}
-**Output:** k cluster Means
-**Method:**
-  Initialize \mu_{i} by randomly assigning k points in {x}.
-  **Loop**
-    *Assignment Step*
-    Set P_{j} <- \empty for 1 \leq j \leq k
-    **for** *i*=1, \dots, n:
-      P_{j_{min}} <- P_{j_{min}} \cup x_{i}
-      where j_{min} = argmin \vert\vert x_{i}-\mu_{j}\vert\vert _{2}^{2}
-    *Estimation Step*
-    **for** *j*=1, \dots k:
-      \mu_{j} <- 1/\vert P_{j} \vert \sum_{x \in P_{j}} x
-    **until** convergence"
-%}
+
+<div>
+  <img width="1fr" class="svg-pseudo"
+  src="/assets/images/elements/Unsupervised/Cluster_Analysis/lloyd_pseudocode.svg"
+  onload="SVGInject(this)"/>
+</div>
+
 The greediness of the algorithm is apparent in both the assignment and
-estimation steps: assign each point to the cluster mean that currently produces
-the lowest square error, and then produce new estimates for each cluster mean
-by using the assigned points. This procedure converges when there is no change
+estimation steps: assign each point to the currently nearest cluster mean, and
+then update our estimates of each cluster mean by using the points assigned to
+each cluster. Lloyd's procedure converges when there is no change
 in the estimated cluster means, or equivalently, when there is no change in the
 cluster assignments. No change in one implies no change in the other.
 
-##
+The distinction between the original problem and the algorithm used to solve it
+pays off here in addressing some common sources of confusion about k-means: the
+assignment step in Lloyd's algorithm has assumed additional structure not given
+by the original problem. By assigning each point to the currently nearest
+centroid, we are minimizing the square error on an individual, per-point basis.
+In many situations, this will tend toward lowering the total within cluster sum
+of square errors &mdash; but not always. The more sophisticated Hartigan-Wong
+algorithm, which is the default algorithm in **R**, is better able to deal with
+circumstances where the batch nature of Lloyd's algorithm gets stuck in local
+minima.
+
+In the assignment step, each point is assigned to the centroid that produces
+the minimum square error. As the square root function is monotonic, this is
+equivalent to assigning each point to the nearest centroid. And this is where
+many people get confused &mdash; since the assignment step is selecting
+the cluster assignments based on minimizing *Euclidean* distance, why can't we
+have a more general algorithm that uses arbitrary metrics? Throw in an *L1*
+metric, and you've improved your algorithm by making it robust to outliers,
+right? Wrong. The fact that minimizing Euclidean distance also minimizes the
+square error is a consequence of algebra. The *problem* we are trying to solve
+is that of estimating the cluster *means*. That's why we chose the variance as
+our objective function, and why Lloyd's algorithm minimizes the square error in
+the assignment step. Using the square error, or variance, allows us to estimate
+the means. If you try to throw in some other, arbitrary metric into the
+assignment step, then the "centroids" you compute in the update step are no
+longer based on trying to minimize the variance. You've basically just given
+yourself an arbitrarily worse assignment to try to estimate the mean of each
+cluster. Another issue I have seen in some explanations of Lloyd's algorithm
+is using the Euclidean distance itself in the assignment step. Again, since the
+square root function is monotonic, this only adds an unnecessary computation to
+each assignment. So while it is fine to think about the assignment step in terms
+of Euclidean distances:
+- Do NOT take a square root in any implementation &mdash; you're only making
+your algorithm less efficient
+- Do NOT try to replace the square error with an arbitrary metric. We're finding
+*means*, which is why we were minimizing variance.
+
+Unfortunately, this confusion about k-means seems rampant. The MATLAB kmeans
+function allows alternate distance functions to be used with Lloyd's algorithm,
+and the documentation contains an example of an 'analysis' using the Manhattan
+distance. The amap package in R, which according to rdocumentation.org is in the
+95th percentile in terms of overall downloads, has a kmeans implementation that
+allows arbitrary distance functions with Lloyd's algorithm. The kmeans in amap
+should never be used. The kmeans function in the standard stats package is a far
+better function, and uses Hartigan-Wong by default. There have even been several
+published papers that try to use alternative metrics in place of the square
+error in Lloyd's algorithm, presenting this fundamental error as a novel method
+meriting careful analysis. These algorithms are incorrect. Listen, sure, you'll
+get some results. Hell, if you cap the iteration number, by definition your
+algorithm will converge. But like my grandmammy never said, just cause you
+put a cat in the oven, don't make it a biscuit. Whatever these algorithms are
+producing, it is NOT a solution to the kmeans problem. If you use a different
+metric in the assignment step, then you have to use a different procedure in
+your update step. The convergence of Lloyd's algorithm is based on both steps
+operating on the same problem - that of finding the means of the clusters.
+
+### Characterization
+
+### Initialization Methods
+
+
+## Sequential Kmeans
+
+As mentioned above, Lloyd's algorithm is a batch algorithm &mdash; only after
+every data point has been assigned to a cluster do we update our estimates of
+the centroids. This can lead to large changes in the centroid estimates, and can
+cause large memory overheads. An alternative approach is to interleave the
+assignment and update steps: after assigning a point to a cluster, update the
+centroid estimate immediately.
+
+## Hartigan-Wong Algorithm
+
+Neither the classic Lloyd-Forgy algorithm nor the online McQueen algorithm takes
+into account the potential degradation of the within cluster variance when a
+single point is added to a cluster. Specifically, whenever a point is assigned
+to a cluster, the estimate of the mean will change &mdash; and this will cause
+the cluster variance to change not just because of the added point, but because
+the square error for *all the other cluster points* will also change. The
+Hartigan-Wong algorithm takes this into account and provides a better
+approximation method to minimizing the total within cluster variance.
+
+# Clusters Found
 
 <script src="/assets/js/d3.js"></script>
 <script src="/assets/js/elements/Unsupervised/Cluster_Analysis/kmeans.js"></script>

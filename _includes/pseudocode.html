@@ -1,12 +1,12 @@
 <pre id="read-{{ include.id }}" style="display:none;">
     {{ include.code }}
 </pre>
-<div id="goal-{{ include.id }}"></div>
+<div id="algo-{{ include.id }}"></div>
 <script type="text/javascript">
     var code = document.getElementById("read-{{ include.id }}").textContent;
-    var parentEl = document.getElementById("goal-{{ include.id }}");
+    var parentEl = document.getElementById("algo-{{ include.id }}");
     var options = {
-        lineNumber: true
+        lineNumber: false
     };
     pseudocode.render(code, parentEl, options);
 </script>
