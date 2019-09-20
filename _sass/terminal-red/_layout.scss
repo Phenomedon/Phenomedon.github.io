@@ -110,6 +110,18 @@
   }
 }
 
+// Citation formatting
+sup {
+  vertical-align: baseline;
+  font-size: 1em;
+  ::before {
+    content: "[";
+  }
+  ::after {
+    content: "]";
+  }
+}
+
 // Set font-families
 .site-home, .site-nav, .site-footer {
   font-family: $nav-font-family;

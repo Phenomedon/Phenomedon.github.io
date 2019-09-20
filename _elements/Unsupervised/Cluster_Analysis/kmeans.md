@@ -27,7 +27,7 @@ Clusters are the truffles in your dataset, waiting to be found and finely grated
 over your analysis. And like any good fungus hunter knows, the first
 task is getting the right hog: one with a keen sense of smell, a lust tempered
 by perspicacity, a snout for rooting but a maw you can muzzle. The second task
-is not getting shot in the face by a paranoid French farmer. Ok, I may have
+is not getting shot in the face by a paranoid French farmer [^1]. Ok, I may have
 lost the thread of the analogy there, but the hogs we're talking about are
 clustering methods. Very often, the first choice in cluster hogs is the
 granddaddy of 'em all &mdash; k-means clustering.
@@ -51,6 +51,7 @@ One of the major sources of confusion about k-means can be traced to conflating
 the problem with the algorithm used to solve it.
 
 # The K-Means Problem
+{: .section}
 
 Let's go back to our hypothetical dataset. Hopefully your imaginary laptop's
 fans have spun down by now. To make things more concrete, we'll say that we
@@ -66,6 +67,8 @@ in other words, what measurable characteristics will we use to differentiate
 one cluster from another?
 
 ## Means to an End
+{: .subsection}
+
 From a statistical point of view, an obvious choice to characterize
 subpopulations is the average, or mean, of each subpopulation. Sample means are
 easy to compute - just add and divide.
@@ -171,6 +174,8 @@ to split our data into {{ils}}k{{ile}} clusters, and find one that gives us the 
 total when we add up the sum of square errors within each cluster.
 
 ## The Size of the Problem
+{: .subsection}
+
 Well I hope you've got a lot of free time, because the number of possible
 partitions is *huge*. How huge? Mathematically speaking, it makes Dwayne Johnson
 look like Kevin Hart - when he was five. The <dfn>Stirling numbers of the second
@@ -225,6 +230,8 @@ So, brute force is out. Any algorithm of practical use is going to need to be
 more sophisticated than arm wrestling with time.
 
 ## Is the Mean Meaningful?
+{: .subsection}
+
 Implicit in the description of the k-means problem so far is that our data can
 be modeled so that each cluster has a mean, and all {{ils}}k{{ile}} of the means
 are distinct. In probabalistic terms, we have assumed that a mixture model
@@ -260,12 +267,14 @@ sizes of human settlements and hard disk error rates, so it is not just a
 mathematical curiosity.
 --->
 # K-Means Algorithms
+{: .section}
 
 Since the space of possible solutions is generally superexponential in the
 cluster number and dataset size, all commonly used algorithms applied to the
 k-means problem are heuristic in nature.
 
 ## Lloyd's Algorithm
+{: .subsection}
 
 The standard algorithm used to solve the k-means problem is often just called
 'the k-means algorithm.' I find this name misleading for two reasons: it makes
@@ -291,6 +300,35 @@ algorithm is as follows:
   src="/assets/images/elements/Unsupervised/Cluster_Analysis/lloyd_pseudocode.svg"
   onload="SVGInject(this)"/>
 </div>
+
+The pseudocode above focuses on the main idea of the algorithm, and thus certain
+details covering edge cases are left out. In lines 2 through 7, we select as
+initial centroids {{ils}}k{{ile}} data points uniformly at random. The use of the uniform
+distribution should be augmented by a procedure that ensures each data point
+selected as an initial centroid is distinct. Knuth's Algorithm P and Algorithm S
+are among the viable choices to produce such a sample. The main loop comprises
+the rest of the algorithm in lines 8 through 21, and alternates between two main
+steps.
+
+The first for loop in lines 11 through 14 is called the assignment step,
+and assigns each data point {{ils}}x_{i}{{ile}} to the cluster with the centroid
+that produces the smallest square error. The assignments are indicated by the
+values of the {{ils}}r_{i}{{ile}}, where we have {{ils}}\forall\ i, r_{i} \in \{1, \dots, k\}{{ile}}.
+
+The second for loop in lines 15 through 18 is called the update or estimation
+step, and consists of computing new estimates for each cluster's centroid by
+averaging all the points assigned to that cluster in the immediately preceding
+assignment step.
+
+The main loop terminates when all centroid estimates are unchanged from one
+iteration to the next. On data sets for which k-means is an appropriate
+clustering procedure, the number of iterations {{ils}}t{{ile}} is usually an
+acceptably small number. In the worst case, however, we have {{ils}}t = 2^{\Omega(\sqrt{n})}{{ile}},
+so in practice most implementations also typically set the maximum number of
+iterations.
+
+### Characterization
+{: .subsubsection}
 
 The greediness of the algorithm is apparent in both the assignment and
 estimation steps: assign each point to the currently nearest cluster mean, and
@@ -355,12 +393,12 @@ metric in the assignment step, then you have to use a different procedure in
 your update step. The convergence of Lloyd's algorithm is based on both steps
 operating on the same problem - that of finding the means of the clusters.
 
-### Characterization
-
 ### Initialization Methods
+{: .subsubsection}
 
 
 ## Sequential Kmeans
+{: .subsection}
 
 As mentioned above, Lloyd's algorithm is a batch algorithm &mdash; only after
 every data point has been assigned to a cluster do we update our estimates of
@@ -370,6 +408,7 @@ assignment and update steps: after assigning a point to a cluster, update the
 centroid estimate immediately.
 
 ## Hartigan-Wong Algorithm
+{: .subsection}
 
 Neither the classic Lloyd-Forgy algorithm nor the online McQueen algorithm takes
 into account the potential degradation of the within cluster variance when a
@@ -381,6 +420,9 @@ Hartigan-Wong algorithm takes this into account and provides a better
 approximation method to minimizing the total within cluster variance.
 
 # Clusters Found
+{: .section}
 
+[^1]:
+    {% include citation.html key="truffle" %}
 <script src="/assets/js/d3.js"></script>
 <script src="/assets/js/elements/Unsupervised/Cluster_Analysis/kmeans.js"></script>
