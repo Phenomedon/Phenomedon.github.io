@@ -1,5 +1,184 @@
 - authors: Ryan Jacobs
   title: The Dark Side Of the Truffle Trade
   type: newspaper
+  year: 2014
+  journal: The Atlantic
   url: https://www.theatlantic.com/international/archive/2014/01/the-dark-side-of-the-truffle-trade/283073/
   key: truffle
+
+- authors:
+    - Naftali Tishby
+    - Fernando C. Pereira
+    - William Bialek
+  title: The Information Bottleneck Method
+  type: article
+  journal: arXiv preprint physics/0004057
+  url: https://arxiv.org/abs/physics/0004057
+  year: 2000
+  key: ibneck
+
+- authors: Weisstein, Eric W.
+  title: Stirling Number of the Second Kind
+  subtitle: From MathWorld &ndash; A Wolfram Web Resource
+  type: article
+  url: http://mathworld.wolfram.com/StirlingNumberoftheSecondKind.html
+  key: stirling2basics
+
+- authors:
+    - Basil Cameron Rennie
+    - Annette Jane Dobson
+  title: On Stirling Numbers of the Second Kind
+  type: article
+  journal: Journal of Combinatorial Theory
+  volume: 7
+  number: 2
+  pages: 116 &ndash; 121
+  year: 1969
+  publisher: Elsevier
+  doi: https://doi.org/10.1016/s0021-9800(69)80045-1
+  key: stirling2bounds
+
+- authors: Stuart Lloyd
+  title: Least squares quantization in PCM
+  type: article
+  journal: IEEE transactions on information theory
+  volume: 28
+  number: 2
+  year: 1982
+  pages: 129 &ndash; 137
+  doi: https://doi.org/10.1109/tit.1982.1056489
+  key: lloydpcm
+
+- authors:
+    - José M. Pena
+    - Jose Antonio Lozano
+    - Pedro Larranaga
+  title: An empirical comparison of four initialization methods for the k-means algorithm
+  type: article
+  journal: Pattern recognition letters
+  volume: 20
+  number: 10
+  year: 1999
+  pages: 1027 &ndash; 1040
+  doi: https://doi.org/10.1016/s0167-8655(99)00069-0
+  key: fourkmeansinitmeths
+
+- authors: Michael R. Anderberg
+  title: Cluster analysis for applications
+  type: book
+  series: probability and mathematical statistics&#58; a series of monographs and textbooks.
+  volume: 19
+  publisher: Academic Press
+  year: 1973
+  doi: https://doi.org/10.1016/c2013-0-06161-0
+  key: caa
+
+- authors:
+    - M. Emre Celebi
+    - Hassan A. Kingravi
+    - Patricio A. Vela
+  title: A comparative study of efficient initialization methods for the k-means clustering algorithm
+  type: article
+  journal: Expert systems with applications
+  volume: 40
+  number: 1
+  year: 2013
+  pages: 200 &ndash; 210
+  doi: https://doi.org/10.1016/j.eswa.2012.07.021
+  key: compstudykmeansinitmeths
+
+- authors: Hans-Hermann Bock
+  title: Clustering Methods - A History of k-Means Algorithms
+  type: article
+  journal: Selected contributions in data analysis and classification
+  year: 2007
+  publisher: Springer
+  pages: 161 &ndash; 172
+  doi: https://doi.org/10.1007/978-3-540-73560-1_15
+  key: kmeanshistory
+
+- authors:
+    - Rafail Ostrovsky
+    - Yuval Rabani
+    - Leonard J. Schulman
+    - Chaitanya Swamy
+  title: The effectiveness of Lloyd-type methods for the k-means problem
+  type: article
+  journal: Journal of the ACM
+  volume: 59
+  number: 6
+  year: 2012
+  article_number: 28
+  pages: 1 &ndash; 22
+  doi: https://doi.org/10.1145/2395116.2395117
+  key: effectivenesslloydtype
+
+- authors:
+    - Margareta Ackerman
+    - Shai Ben-David
+  title: Clusterability&#58; A theoretical study
+  type: article
+  journal: Proceedings of the Twelth International Conference on Artificial Intelligence and Statistics
+  pages: 1 &ndash; 8
+  year: 2009
+  editor: David van Dyk and Max Welling
+  volume: 5
+  series: Proceedings of Machine Learning Research
+  address: Hilton Clearwater Beach Resort, Clearwater Beach, Florida USA
+  date: 16&ndash;18 April
+  publisher: PMLR
+  pdf: http://proceedings.mlr.press/v5/ackerman09a/ackerman09a.pdf
+  url: http://proceedings.mlr.press/v5/ackerman09a.html
+  key: clusterability
+
+- authors: Andrea Vattani
+  title: k-means requires exponentially many iterations even in the plane
+  type: article
+  journal: Computing Research Repository
+  volume: abs/0812.0382
+  year: 2008
+  url: http://arxiv.org/abs/0812.0382
+  key: kmeansplaneexp
+
+- authors:
+    - David Arthur
+    - Bodo Manthey
+    - Heiko R&ouml;glin
+  title: k-Means has Polynomial Smoothed Complexity
+  type: article
+  journal: Computing Research Repository
+  volume: abs/0904.1113
+  year: 2009
+  url: http://arxiv.org/abs/0904.1113
+  key: kmeanspolysmooth
+
+- authors: Abigail See
+  title: Smoothed Analysis With Applications in Machine Learning
+  type: thesis
+  level: master's thesis
+  university: University of Cambridge
+  year: 2014
+  url: https://cs.stanford.edu/people/abisee/p3essay.pdf
+  key: smoothedml
+
+- authors:
+    - David Arthur
+    - Sergei Vassilvitskii
+  title: How slow is the k-means method?
+  type: article
+  journal: In Symposium on computational geometry
+  volume: 6
+  number: 32
+  pages: 1 &ndash; 10
+  year: 2006
+  key: howslowkmeans
+
+- authors:
+    - Leon Bottou
+    - Yoshua Bengio
+  title: Convergence properties of the k-means algorithms
+  type: article
+  journal: In Advances in neural information processing systems
+  pages: 585 &ndash; 592
+  year: 1995
+  key: kmeansconvergenceprops

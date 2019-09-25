@@ -35,7 +35,7 @@ granddaddy of 'em all &mdash; k-means clustering.
 Not only is k-means one of the oldest forms of cluster analysis, it is also one
 of the most widely used. And it's the first approach to unsupervised learning
 many budding datamancers encounter. K-means' enduring popularity both in
-practice and pedagogy stems from the elegance in its simplicity. In my
+practice and pedagogy stems from its elegance and simplicity. In my
 experience, this unfortunately also means that k-means is one of the most
 frequently misunderstood, poorly explained, and outright abused methods in
 machine learning. Granted, my personal experience, like anyone's, is
@@ -77,13 +77,13 @@ unknown parameter of a particular statistical model if no other quantity
 computed from a sample could provide any more information about the unknown
 parameter. The notion of an <dfn>information bottleneck</dfn> is a related
 information theoretic concept that quantifies how much information is lost about
-the parameter of interest by using a particular statistic. In a certain sense,
-the information bottleneck generalizes the concept of a sufficient statistic
-from the perspective of lossy compression.
+the parameter of interest by using a particular statistic. In a certain
+sense, the information bottleneck generalizes the concept of a sufficient
+statistic from the perspective of lossy compression.
 {{end_aside}}
 Furthermore, depending on the true underling cluster structure and
 what we plan to do with it, using only the means to characterize each cluster
-could be sufficient in a statistical sense - the information bottleneck imposed
+could be sufficient in a statistical sense - the information bottleneck [^2] imposed
 by using these single parameter cluster summaries could be immaterial to our
 purposes.
 
@@ -145,6 +145,20 @@ sum of square errors to all realized sample points in the {{ils}}j^{th}{{ile}}
 cluster. So we just need to take the average of all the points in
 cluster {{ils}}P_{j}{{ile}}, and we'll have our estimate
 for {{ils}}\mu_{j}{{ile}} :
+{{begin_aside}}
+While the sample mean is the unique minimizer of the square error to all sample
+points, {{ils}}\sum_{x \in P_{j}}\vert\vert x - \bar{x}\vert\vert{{ile}}, and an
+unbiased estimator of the population mean, {{ils}}E[\bar{x}]=\mu_{j}{{ile}}, it is
+not necessarily the unbiased estimator of the population mean with minimum
+variance, {{ils}}\bar{x}\overset{?}{=} \argmin_{c \in \mathbb{R}^{d}}E[\vert\vert \mu_{j} - c\vert\vert_{2}^{2}]{{ile}}.
+<br>
+If the population distribution is Gaussian, for example, then the sample mean is
+the MVUE for the population mean. In other cases, such as when the distribution
+is uniform over an unknown range {{ils}}[a, b]{{ile}}, the sample mean is <em>not</em>
+the MVUE for the population mean. This perhaps subtle point becomes more
+relevant when considering assumptions and properties of solutions produced by
+the algorithms discussed in the next section.
+{{end_aside}}
 <div>
 $$
 \bar{x}_{j} = \argmin_{c \in \mathbb{R}^{d}} \sum_{x \in P_{j}}\vert\vert x - c \vert\vert_{2}^{2}
@@ -167,7 +181,9 @@ subsets {{ils}}\mathbf{P} = \{P_{1}, P_{2}, \dots P_{k}\}{{ile}},
 we want to find a particular partition {{ils}}\mathbf{P}_{0}{{ile}}
 that minimizes the overall sum of squared errors,
 <div>
-$$\mathbf{P}_{0} = \argmin_{\mathbf{P}\in\mathcal{P}}\sum_{j = 1}^{k}\sum_{x \in P_{j}}\vert\vert x - \bar{x}_{j}\vert\vert_{2}^{2}.$$
+$$
+\mathbf{P}_{0} = \argmin_{\mathbf{P}\in\mathcal{P}}\sum_{j = 1}^{k}\sum_{x \in P_{j}}\vert\vert x - \bar{x}_{j}\vert\vert_{2}^{2}. \tag{1}\label{1}
+$$
 </div>
 Sounds simple enough, right? All we have to do is try out all the different ways
 to split our data into {{ils}}k{{ile}} clusters, and find one that gives us the smallest
@@ -185,7 +201,7 @@ into {{ils}}k{{ile}} non-empty subsets.
 For a given {{ils}}n{{ile}} and {{ils}}k{{ile}},
 the corresponding Stirling number of the second kind,
 denoted by {{ils}}n \brace k{{ile}}, is given by the
-formula
+formula [^3]
 {{begin_aside}}
 The Stirling numbers of the second kind count the number of non-empty partitions
 &mdash; every subset has to contain at least one point. This restriction is fine
@@ -194,13 +210,13 @@ issues of empty clusters.
 {{end_aside}}
 <div>
 $$
-{n \brace k} = \frac{1}{k!}\sum_{i=0}^{k}(-1)^{i}\binom{k}{i}(k - i)^{n}.
+{n \brace k} = \frac{1}{k!}\sum_{i=0}^{k}(-1)^{i}\binom{k}{i}(k - i)^{n}. \tag{2}\label{2}
 $$
 </div>
 See those factorials and binomial coefficients? Turns out we're dealing with
-**super-exponential** growth. For {{ils}} n \geq 2{{ile}}
+**exponential** growth. For {{ils}} n \geq 2{{ile}}
 and {{ils}} 1 \leq k \leq n - 1 {{ile}}, we have the following lower and upper
-bounds on these Stirling numbers:
+bounds on these Stirling numbers [^4]:
 <div>
 $$
 \frac{1}{2}(k^2 + k + 2)k^{n-k-1} - 1 \leq {n \brace k} \leq \frac{1}{2}\binom{n}{k}k^{n-k}.
@@ -247,9 +263,9 @@ other type. If this assumption were violated by our data set, then the k-means
 model would have no relevance anyway.
 
 We can say slightly more about the mixture model tacitly assumed by the k-means
-problem: for each component, computing the mean is meaningful. What I mean is,
-we have assumed both the existence and identifiability of each component
-distribution's first moment.
+problem: for each component, computing the mean is meaningful. What I mean is
+(I'll stop now, I mean it), we have assumed both the existence and
+identifiability of each component distribution's first moment.
 <!--
 Obviously, if
 the population mean doesn't exist, the sample mean doesn't really capture any
@@ -269,7 +285,7 @@ mathematical curiosity.
 # K-Means Algorithms
 {: .section}
 
-Since the space of possible solutions is generally superexponential in the
+Since the space of possible solutions is generally exponential in the
 cluster number and dataset size, all commonly used algorithms applied to the
 k-means problem are heuristic in nature.
 
@@ -277,19 +293,36 @@ k-means problem are heuristic in nature.
 {: .subsection}
 
 The standard algorithm used to solve the k-means problem is often just called
-'the k-means algorithm.' I find this name misleading for two reasons: it makes
-it easier to confuse the problem posed with the method of solving it, and there
-is actually more than one algorithm that can solve the problem. In order to
+'the k-means algorithm.' I find this name misleading for two reasons: it
+promotes conflation of the problem posed with the method of solving it, and
+there are actually several algorithms that can solve the problem. In order to
 avoid both these issues, I'm going to use the original name from the computer
-science literature: Lloyd's algorithm.
+science and pattern recognition communities: Lloyd's algorithm [^5].
+Stuart Lloyd of Bell Laboratories originally proposed the procedure in 1957 for
+the  purpose of finding the minimal distortion signal quantization in the
+context of pulse code modulation [^6].
+
+Unless you're familiar with signal processing, that last sentence probably
+sounds like some nonsense J.J. Abrams used as dialogue in a Star Wars movie.
+Basically, Lloyd was working on transmitting digital signals over a noisy
+channel. The receiver stored {{ils}}k{{ile}} representatives, and each
+transmitted sample, corrupted by noise over the channel, had to be assigned to
+one of the {{ils}}k{{ile}} representatives. Lloyd offered a solution using
+the specific {{ils}}k{{ile}} representatives that minimized the distortion
+between the original signal and the version reconstructed by the receiver.
+Distortion in this case was measured by the power in the difference between the
+signals &mdash; and this power is just the average square of the noise. So Lloyd
+needed to minimize square error, and historically, we can see why knowing the
+value of {{ils}}k{{ile}} in advance wasn't so outlandish in the context of
+signal recovery.
 
 LLoyd's algorithm is an alternating, iterative procedure that shares structural
 similarities with expectation maximization algorithms. The algorithm performs a
 greedy optimization at each step in order to avoid examining every possible
 partition of our data set. We can thus find an answer to our k-means problem
 without the necessity of immortality &mdash; the trade-off is that the solution
-produced is only guaranteed to be 'locally' optimal in a sense that we'll see
-later.
+produced is only guaranteed to be 'locally' optimal in a sense that we'll make
+concrete later.
 
 The simplicity of Lloyd's algorithm is in large part responsible for the
 ubiquity of k-means in cluster analysis. In it's simplest form, Lloyd's
@@ -302,13 +335,13 @@ algorithm is as follows:
 </div>
 
 The pseudocode above focuses on the main idea of the algorithm, and thus certain
-details covering edge cases are left out. In lines 2 through 7, we select as
-initial centroids {{ils}}k{{ile}} data points uniformly at random. The use of the uniform
-distribution should be augmented by a procedure that ensures each data point
-selected as an initial centroid is distinct. Knuth's Algorithm P and Algorithm S
-are among the viable choices to produce such a sample. The main loop comprises
-the rest of the algorithm in lines 8 through 21, and alternates between two main
-steps.
+details covering edge cases and efficient implementation are left out. In lines
+2 through 7, we select as initial centroids {{ils}}k{{ile}} data points
+uniformly at random. The use of the uniform distribution should be augmented by
+a procedure that ensures each data point selected as an initial centroid is
+distinct. Distinct initial centroids can be guaranteed by a standard rejection
+sampling scheme. The main loop comprises the rest of the algorithm in
+lines 8 through 21, and alternates between two main steps.
 
 The first for loop in lines 11 through 14 is called the assignment step,
 and assigns each data point {{ils}}x_{i}{{ile}} to the cluster with the centroid
@@ -321,14 +354,301 @@ averaging all the points assigned to that cluster in the immediately preceding
 assignment step.
 
 The main loop terminates when all centroid estimates are unchanged from one
-iteration to the next. On data sets for which k-means is an appropriate
-clustering procedure, the number of iterations {{ils}}t{{ile}} is usually an
-acceptably small number. In the worst case, however, we have {{ils}}t = 2^{\Omega(\sqrt{n})}{{ile}},
-so in practice most implementations also typically set the maximum number of
-iterations.
+iteration to the next.
 
-### Characterization
+### Forgy Initialization
 {: .subsubsection}
+The initialization method in Lloyd's algorithm deserves more attention. In the
+above procedure, the initial centroids are selected from the input data
+uniformly at random. This initialization procedure is often attributed to
+E.W.&nbsp;Forgy [^7], and the overall iterative method is sometimes called the
+Lloyd-&nbsp;Forgy algorithm: for instance, in the kmeans function of the stats
+package in R. There is no theoretical justification for such an
+initialization, and it can in fact produce undesirable results.
+
+Ideally, the initial centroids will each be selected from *distinct* clusters.
+Such an ideal initialization would produce a much better preliminary
+representation of the data's cluster structure, and almost certainly a final
+clustering that accurately captures the target patterns. Of course, guaranteeing
+such a representative initialization would require knowing the cluster
+structure, and we are again left only with heuristic methods.
+
+For a dataset with {{ils}}n \gg k{{ile}}, selecting the initial centroids
+independently may cause some clusters to be unrepresented. Because Lloyd's
+algorithm is only guaranteed to find a local optimum, such a poor starting
+representation produced by Forgy initialization can significantly degrade
+performance.
+
+Alternatively, we may determine the initial centroids by:
+- Initially assigning each point to a cluster uniformly at random. In other
+words, for {{ils}}1 \leq i \leq n{{ile}}, select {{ils}}r_{i} \sim \scriptsize{\text{UNIFORM}}\{1, k\} {{ile}}.
+- Compute each initial centroid as we would during a typical estimation step,
+i.e., set {{ils}}\mu_{j}^{\scriptsize{(0)}} = \frac{1}{\vert P_{j}\vert}\scriptsize{\displaystyle\sum_{x \in P_{j}}}\hspace{0.2em} x {{ile}}.
+
+The above initialization method is often referred to as Random Partition
+initialization, although there are conflicting claims as to who originated
+each of these initialization methods [^7][^8][^9].
+
+Some passing thought should make apparent that the initial
+centroids produced by random partition will tend to be near the collective
+centroid of the entire dataset. Such an initialization can lead to its own
+problems, and is as arbitrary a starting point as Forgy initialization.
+{{begin_aside}}
+Some authors attribute what I have called Forgy initialization here to MacQueen
+<sup id="fnref:5:a"><a href="#fn:5" class="footnote">5</a></sup>
+<sup id="fnref:9:0"><a href="#fn:9" class="footnote">9</a></sup>, others to
+McRae <sup id="fnref:8:a"><a href="#fn:8" class="footnote">8</a></sup>,
+and instead credit Forgy with the Random Partition method. These conflicting
+claims of origination can not be arbitrated by primary sources, as Forgy's
+initial presentation was given as a conference talk, which is apparently only
+described in secondary sources <sup id="fnref:5:b"><a href="#fn:5" class="footnote">5</a></sup>
+such as <sup id="fnref:8:b"><a href="#fn:8" class="footnote">8</a></sup>.
+<br/>
+Regardless of who should be credited with either of these initialization
+methods, they are both equally crappy: three plunger worthy. The typical
+recommendation for dealing with such poor initialization methods is to simply
+perform them so many times that some coherence is achieved in the resulting
+clusters. I think a better approach is to use more principled initialization
+methods, which are discussed in a following section.
+{{end_aside}}
+
+Extensive empirical results on real and synthetic data [^9] demonstrate that
+both Forgy and Random Partition initialization are among the worst methods
+to start Lloyd's algorithm. For even reasonably small datasets, Forgy
+initialization tends to vary wildly from one run to the next, and, as discussed
+above, may under represent the cluster structure by selecting initial centroids
+that are close together. Random Partition initialization varies less between
+runs, but this is an obvious byproduct of the tendency to position initial
+centroids towards the overall center of the data set. This also means successive
+runs of Random Partition tend to produce similar initializations. If such central
+initializations cause Lloyd's algorithm to converge to a local minimum with
+poor within cluster variance, then repeated runs using Random Partition are
+unlikely to produce any noticeable improvement. The idiosyncrasies of a
+particular data sets may make it appear as if Random Partition tends to produce
+lower within cluster variance than Forgy initialization [^7], but such a
+conclusion fails to account for the similar, centrally located initial
+centroids of each Random Partition initialization. You might just get lucky
+and Random Partition initialization converges to a good clustering.
+
+Since Lloyd's algorithm is highly sensitive to initial conditions, as discussed
+below, careful initialization methods can greatly improve results. More
+principled approaches that address, albeit heuristically, the issue of finding
+initial centroids more representative of the cluster structure are discussed
+below.
+
+### Properties
+{: .subsubsection}
+
+For reference, here are some important properties of Lloyd's algorithm:
+
+ - *Hard Assignment* &mdash; although the k-means problem specifies that the
+ data set should be partitioned into disjoint subsets, the assignment step in
+ each iteration of Lloyd's algorithm does not relax this requirement. Each
+ iteration's hard assignment influences subsequent update steps, and thus the
+ possible clustering solutions found.
+ - *Batch Processing* &mdash; all points are assigned to clusters before any
+ centroid update occurs. As a consequence, the result of the algorithm is
+ independent of the order in which the data are stored; for fixed initial
+ centroids, permuting the index labels {{ils}}\{1, \dots, n\}{{ile}} has no
+ effect on the solution found.
+ - *Deterministic After Initialization* &mdash; while the initialization method
+ used may be stochastic, once initial centroids have been generated Lloyd's
+ algorithm is entirely deterministic. Thus, the initial centroids completely
+ determine the final clustering.
+ - *Complexity* &mdash; time complexity of {{ils}}\Theta\left(nkdt\right){{ile}}
+ and space complexity of {{ils}}\Theta\left(d(n + k)\right){{ile}},
+ where {{ils}}n{{ile}} is the number of data points, {{ils}}k{{ile}} is the
+ number of clusters, {{ils}}d{{ile}} is the number of features,
+ and {{ils}}t{{ile}} is the number of iterations.
+
+On data sets that have high measures of clusterability [^10][^11], Lloyd's
+algorithm converges in an acceptably small number of iterations {{ils}}t{{ile}}.
+Empirical results suggest that often convergence actually does occur in
+relatively few iterations. Even for dimensions as low as {{ils}}d = 2{{ile}},
+however, data sets can be constructed that demonstrate in the worst
+case {{ils}}t = 2^{\Omega(n)}{{ile}} [^12]. The apparent discrepancy between
+these empirical and theoretical results is reconciled by a smoothed analysis of
+Lloyd's algorithm [^13].
+
+Worst case analysis can be framed as an adversarial game. In this setting,
+you are player 1 and will use Lloyd's algorithm to perform k-means clustering
+on some data set; player 2 is some jerk who knows all this and tries to
+generate a data set that will require you to perform as many iterations as
+possible. A geometric construction in the plane can be used by such a jerk to
+cause you to take at least exponentially many
+iterations {{ils}}t = 2^{\Omega(n)}{{ile}} [^12]. This planar construction can
+be extended to higher dimensions, so you're not wining this game by using bigger
+pieces.
+
+Smoothed analysis is a hybrid of worst-case and average-case analysis.
+Worst-case complexity only focuses on the worst possible input, regardless of
+how rare such an input may be. Average-case complexity, on the other hand,
+assumes some probability distribution over all possible inputs, and then
+considers the expected outcome. Typically, a uniform distribution over inputs
+is assumed &mdash; I suppose this can be seen from a Bayesian viewpoint as an
+'uninformative' prior, but that just raises the reference class problem.
+Smoothed complexity avoids the pessimism of worst-case complexity and the
+arbitrariness of average-case complexity, while retaining positive aspects of
+both. If worst-case complexity asks, 'what is the longest possible running time?',
+and average-case complexity asks, 'what is the expected running time?', then
+smoothed complexity asks, 'what is the longest expected running time, given that
+your adversary can choose any input which will then be perturbed?'[^14]
+
+So for smoothed complexity, the game changes: there's still some jerk trying to
+generate the worst possible data for you to cluster, but now the jerk's input
+gets corrupted by Gaussian noise before it gets to you. More concretely, every
+data point {{ils}}x_{i} \in \mathbb{R}^{d}{{ile}} gets independently perturbed
+by a {{ils}}d{{ile}}-dimensional Gaussian random
+vector {{ils}}\mathcal{N}(\mathbf{0}, \sigma^{2}\textbf{I}_{d}){{ile}} before
+you see it. Using smoothed analysis on Lloyd's algorithm, it turns out that the
+expected number of iterations is[^13]:
+<div>
+$$
+E[t] = O(\frac{n^{34}\log^{4}(n)k^{34}d^{8}}{\sigma^{6}}).
+$$
+</div>
+So, Lloyd's algorithm has a smoothed running time that is polynomial in the size
+of the data set, which explains the typically fast convergence in practice. Most
+implementations in popular packages in languages such as R, python, and MATLAB
+also typically set a maximum number of iterations, so just in case a jerk did
+generate your data, you don't have to play. Alternatively, the smoothed analysis
+of Lloyd's algorithm shows that if we add some Gaussian noise to our data set,
+we might reduce the number of iterations to convergence [^12][^13][^15].
+
+The determinism of Lloyd's algorithm combined with hard assignment and
+batch processing cause any clustering results obtained to be highly sensitive to
+initial conditions. The next section addresses these details.
+
+### Solution Characteristics
+{: .subsubsection}
+
+When describing the clusters found by Lloyd's algorithm, three traits tend to
+come up repeatedly: locally optimal, spherical, and equally sized.
+
+Lloyd's algorithm guarantees only locally, and not globally, optimal solutions.
+Although a nearly universal description of the clusters returned by Lloyd's
+algorithm, the use of the analytic notion of local optimality may seen
+incongruous for a combinatorial problem. We can make this statement about local
+optimality rigorous by thinking of the problem in the right context.
+
+Recall that the objective from the k-means problem is to find the lowest total
+within cluster variance:
+<div>
+$$
+\sum_{j = 1}^{k}\sum_{x \in P_{j}}\vert\vert x - \bar{x}_{j}\vert\vert_{2}^{2}. \tag{3}\label{3}
+$$
+</div>
+Our given data set {{ils}}\{x_{i}\}_{\scriptsize{i=1}}^{\scriptsize{n}}{{ile}}
+has a finite number of points {{ils}}n{{ile}}. From our earlier discussion about
+Stirling numbers \eqref{2}, although the number of partitions may be huge,
+it's still finite. Now as Lloyd's algorithm only uses points in the data set
+to estimate each cluster mean, the set of possible centroids is also obviously
+finite. Since Lloyd's algorithm can only change any estimate of a centroid
+mean {{ils}}\bar{x}_{j}{{ile}} by changing which points are assigned to its
+cluster {{ils}}P_{j}{{ile}}, it can only make discrete, not continuous, changes
+to those estimates &mdash; a defining property of combinatorial optimization
+problems.
+
+Local optimality describes solutions that are better than any other 'nearby'
+solutions, but in order for this idea to make sense we need a well-defined
+concept of 'nearness'; specifically, we need to be able to talk about
+arbitrarily 'near' solutions, which is equivalent to being able to move
+continuously from one solution to another in arbitrarily small steps. I'm
+talking calculus, and we've entered the realm of analysis. As we just saw above,
+however, the combinatorial nature of the k-means problem only permits discrete
+jumps in the value of our objective function \eqref{3}. So what does everyone
+mean when they use local optimality to describe the output of Lloyd's algorithm?
+
+Well, in order to make sense we're going to have to get weird. Lloyd's algorithm
+estimates a set of
+centroids {{ils}}\{\bar{x}_{j}\}_{\scriptsize{j=1}}^{\scriptsize{k}}{{ile}}. To
+discuss the local optimality of this solution, we're going to embed it in a
+vector space.
+
+If we look inside the solution Lloyd's algorithm gives us, it consists of a set
+of k different {{ils}}d{{ile}}-dimensional vectors {{ils}}\bar{x}_{j}{{ile}}. To
+perform the desired embedding, we're going to vectorize this solution set:
+concatenate all k centroid vectors into one long {{ils}}dk{{ile}}-dimensional
+vector
+
+<div>
+$$
+\bar{\xi} = (\bar{x}_{11}, \dots,\, \bar{x}_{1d},\, \bar{x}_{21}, \dots,\, \bar{x}_{2d}, \dots,\, \bar{x}_{k1}, \dots,\, \bar{x}_{kd})'.
+$$
+</div>
+
+Now all of the possible partitions of our data set corresponds to a discrete set
+of possible points {{ils}}\bar{\xi}\in\mathbb{R}^{df}{{ile}}. Starting from any
+intialization, it should be easy to see that after each assignment step, the
+cost \eqref{3} is either reduced or constant. Similarly, the
+variance minimizing property of means implies that after each update step, cost
+is either reduced or constant. So overall, each iteration
+through the main loop of Lloyd's algorithm cannot increase the value of the
+objective; since we only have a finite number of possible objective values, we
+will eventually reach an objective value no lower than the previous value, which
+will cause Lloyd's algorithm to terminate.
+
+So every iteration changes {{ils}}\bar{\xi}{{ile}} and lowers the cost until it
+can't be lowered anymore &mdash; but the final {{ils}}\bar{\xi}{{ile}} returned
+may not yield the lowest possible cost \eqref{1} for the given data set. What's
+going on?
+
+Well, this is where the hard assignment, batch processing, and determinism of
+Lloyd's algorithm come in. Initialization picks
+some {{ils}}\bar{\xi}^{(0)}{{ile}} from the discrete set of all
+possible {{ils}}\bar{\xi}{{ile}}. Now at each successive
+iteration {{ils}}t{{ile}}, the current cost defines a neighborhood of
+accessible {{ils}}\bar{\xi}{{ile}} from which Lloyd's algorithm can choose; if
+one of these {{ils}}\bar{\xi}{{ile}} reduces the objective, the assignment step
+essentially computes a new value for \eqref{3} and the update step moves our
+long centroid vector
+from {{ils}}\bar{\xi}^{(t)}{{ile}} to {{ils}}\bar{\xi}^{(t+1)}{{ile}}. Because
+of the structure of Lloyd's algorithm, every {{ils}}\bar{\xi}^{(t+1)}{{ile}} is
+completely determined by {{ils}}\bar{\xi}^{(t)}{{ile}}.
+
+What happens is that eventually, Lloyd's algorithm reaches a
+point {{ils}}\bar{\xi}^{(t')}{{ile}} whose neighborhood contains no other {{ils}}\bar{\xi}{{ile}}.
+In the language of analysis, we have reached an open neighborhood
+of {{ils}}\bar{\xi}^{(t')}{{ile}} where the cost is constant. In this sense, the
+centroids returned by Lloyd's algorithm corresponding
+to {{ils}}\bar{\xi}^{(t')}{{ile}} yield a local minimum of the cost function.
+
+The above argument moves the combinatorial optimization procedure used
+by Lloyd's algorithm into the context of gradient descent [^16]. This gradient
+descent formulation also makes the size of the neighborhoods in each iteration
+more concrete. It turns out the learning rate in the {{ils}}d{{ile}}-dimensional
+subspace of {{ils}}\mathbb{R}^{dk}{{ile}} corresponding to {{ils}}\bar{x}_{j}{{ile}}
+is equal to {{ils}}\frac{1}{\vert P_{j} \vert}{{ile}}. In other words, the step
+size in the part of {{ils}}\bar{\xi}{{ile}} that
+represents {{ils}}\bar{x}_{j}{{ile}} is defined by the number of points
+currently assigned to cluster {{ils}}P_{j}{{ile}}, and all k step sizes define
+the neighborhood of {{ils}}\bar{\xi}{{ile}} described above[^16].
+
+Another aspect of the clusters returned by Lloyd's algorithm is their tendency
+toward spherical shape. The shape of the clusters is a direct consequence of the
+k-means objective and the hard assignment used.
+
+For a fixed point {{ils}}\hat{\mu}_{j}{{ile}}, an elementary property of the
+Euclidean metric is that all points a fixed distance {{ils}}r{{ile}}
+from {{ils}}\hat{\mu}_{j}{{ile}} form a sphere centered at {{ils}}\hat{\mu}_{j}{{ile}}
+with radius {{ils}}r{{ile}}. So in the assignment step, for each
+point {{ils}}x_{i}{{ile}}, Lloyd's algorithm essentially forms a sphere centered
+at each {{ils}}\hat{\mu}_{j}{{ile}} with a radius
+of {{ils}}\vert\vert x_{i} - \mu_{j}\vert\vert_{2}^{2}{{ile}} and chooses the
+sphere with the smallest radius to determine assignment.
+
+Obviously, the specific location of the points in the data set will determine
+the actual shape of the clusters found by Lloyd's algorithm. But for each
+cluster, if we take the point in that cluster farthest from its centroid, we can
+form a sphere containing all points in the cluster.
+
+The last common attribute of a Lloyd's clustering we will consider is the claim
+that they tend to be of equal size. This description tends to cause confusion,
+as the notion of size intended is often left undefined. Visualizations of the
+case where {{ils}}d=2{{ile}} are often used, and the areas of the
+
+### Measurable Mistakes
+{:subsubsection}
 
 The greediness of the algorithm is apparent in both the assignment and
 estimation steps: assign each point to the currently nearest cluster mean, and
@@ -393,11 +713,7 @@ metric in the assignment step, then you have to use a different procedure in
 your update step. The convergence of Lloyd's algorithm is based on both steps
 operating on the same problem - that of finding the means of the clusters.
 
-### Initialization Methods
-{: .subsubsection}
-
-
-## Sequential Kmeans
+## Sequential K-Means
 {: .subsection}
 
 As mentioned above, Lloyd's algorithm is a batch algorithm &mdash; only after
@@ -407,10 +723,16 @@ cause large memory overheads. An alternative approach is to interleave the
 assignment and update steps: after assigning a point to a cluster, update the
 centroid estimate immediately.
 
+### Properties
+{: .subsubsection}
+
+### Solution Characteristics
+{: .subsubsection}
+
 ## Hartigan-Wong Algorithm
 {: .subsection}
 
-Neither the classic Lloyd-Forgy algorithm nor the online McQueen algorithm takes
+Neither the classic Lloyd-Forgy algorithm nor the online MacQueen algorithm takes
 into account the potential degradation of the within cluster variance when a
 single point is added to a cluster. Specifically, whenever a point is assigned
 to a cluster, the estimate of the mean will change &mdash; and this will cause
@@ -419,10 +741,83 @@ the square error for *all the other cluster points* will also change. The
 Hartigan-Wong algorithm takes this into account and provides a better
 approximation method to minimizing the total within cluster variance.
 
-# Clusters Found
+### Properties
+{: .subsubsection}
+
+### Solution Characteristics
+{: .subsubsection}
+
+## Initialization Methods
+{: .subsection}
+
+## Data Normalization
+{: .subsection}
+
+# Clustering Results
+{: .section}
+
+## Benchmarks
+{: .subsection}
+
+## Cluster Validity
+{: .subsection}
+
+# Relationship to Other Methods
+{: .section}
+
+## Gaussian Mixture Models
+{: .subsection}
+
+## Principal Component Analysis
+{: .subsection}
+
+## Expectation Maximization
+{: .subsection}
+
+# Considerations in Application
+{: .section}
+
+## Estimating k
+{: .subsection}
+
+## Alternative Methods
+{: .subsection}
+
+# Summary
 {: .section}
 
 [^1]:
     {% include citation.html key="truffle" %}
+[^2]:
+    {% include citation.html key="ibneck" %}
+[^3]:
+    {% include citation.html key="stirling2basics" %}
+[^4]:
+    {% include citation.html key="stirling2bounds" %}
+[^5]:
+    {% include citation.html key="kmeanshistory" %}
+[^6]:
+    {% include citation.html key="lloydpcm" %}
+[^7]:
+    {% include citation.html key="fourkmeansinitmeths" %}
+[^8]:
+    {% include citation.html key="caa" %}
+[^9]:
+    {% include citation.html key="compstudykmeansinitmeths" %}
+[^10]:
+    {% include citation.html key="effectivenesslloydtype"%}
+[^11]:
+    {% include citation.html key="clusterability"%}
+[^12]:
+    {% include citation.html key="kmeansplaneexp"%}
+[^13]:
+    {% include citation.html key="kmeanspolysmooth"%}
+[^14]:
+    {% include citation.html key="smoothedml" %}
+[^15]:
+    {% include citation.html key="howslowkmeans" %}
+[^16]:
+    {% include citation.html key="kmeansconvergenceprops" %}
+
 <script src="/assets/js/d3.js"></script>
 <script src="/assets/js/elements/Unsupervised/Cluster_Analysis/kmeans.js"></script>
