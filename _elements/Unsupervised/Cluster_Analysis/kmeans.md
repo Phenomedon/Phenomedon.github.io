@@ -634,7 +634,7 @@ from {{ils}}\hat{\mu}_{j}{{ile}} form a sphere centered at {{ils}}\hat{\mu}_{j}{
 with radius {{ils}}r{{ile}}. So in the assignment step, for each
 point {{ils}}x_{i}{{ile}}, Lloyd's algorithm essentially forms a sphere centered
 at each {{ils}}\hat{\mu}_{j}{{ile}} with a radius
-of {{ils}}\vert\vert x_{i} - \mu_{j}\vert\vert_{2}^{2}{{ile}} and chooses the
+of {{ils}}\vert\vert x_{i} - \hat{\mu}_{j}\vert\vert_{2}{{ile}} and chooses the
 sphere with the smallest radius to determine assignment.
 
 Obviously, the specific location of the points in the data set will determine
@@ -642,10 +642,110 @@ the actual shape of the clusters found by Lloyd's algorithm. But for each
 cluster, if we take the point in that cluster farthest from its centroid, we can
 form a sphere containing all points in the cluster.
 
-The last common attribute of a Lloyd's clustering we will consider is the claim
-that they tend to be of equal size. This description tends to cause confusion,
-as the notion of size intended is often left undefined. Visualizations of the
-case where {{ils}}d=2{{ile}} are often used, and the areas of the
+The last common attribute of clusters resulting from Lloyd's algorithm we will
+consider is the claim that they tend to be of equal size. This description tends
+to cause confusion, as the notion of size intended is often left undefined. The
+centroids produced by Lloyd's algorithm define a centroidal Voronoi tessellation:
+we can split up {{ils}}\mathbb{R}^{d}{{ile}} into k cells, where
+the {{ils}}j^{th}{{ile}} cell consists of all the points closer
+to {{ils}}\hat{\mu}_{j}{{ile}} than any other centroid. When describing the
+'size' of clusters, visualizations where {{ils}}d=2{{ile}} are often used, with
+each cell distinctly colored. When plotted just right, the area covered by each
+color can be made roughly equal, and the equal size claim is considered
+justified. Of course, such a justification is absurd: some of the voronoi cells
+are unbounded and so have infinite area. All you have to do is move around the
+plot, and the proportion of each color will change.
+
+We can attempt to correct this error by drawing a box around our data set with
+dimensions defined by the smallest and largest coordinates in each dimension.
+While this forces each Voronoi cell to be compact, it doesn't capture the real
+notion of 'size' used by Lloyd's algorithm; besides, those formerly infinite
+Voronoi cells are now governed by the outliers in our data.
+
+Some descriptions instead use the number of points in each cluster to define
+their sizes, but this too does not completely describe the results of Lloyd's
+algorithm: it is easy to construct examples of clusters containing very
+different numbers of points, but which produce lower total within cluster
+variance than a more equal division of point into clusters.
+
+Combining the variance and the cardinality of the clusters in a certain way,
+however, does give us a strict meaning of 'size' which can describe the behavior
+of Lloyd's algorithm. For a given data
+set {{ils}}\{x_{i}\}_{\scriptsize{i=1}}^{\scriptsize{n}}{{ile}}, consider
+the {{ils}}j^{th}{{ile}} cluster {{ils}}P_{j}{{ile}}. As before, the
+unnormalized variance within this cluster is given by its total sum of square
+errors, {{ils}}\scriptsize{\displaystyle\sum_{x \in P_{j}}}\normalsize\vert\vert x - \bar{x}_{j}\vert\vert_{2}^{2}{{ile}}.
+What happens if we add some point {{ils}}x^{\ast}{{ile}} to cluster {{ils}}P_{j}{{ile}}?
+
+Well, if you work out some mildly tedious algebra, you'll find that after adding
+point {{ils}}x^{\ast}{{ile}} to cluster {{ils}}P_{j}{{ile}}, its total sum of
+square errors becomes [^17]
+<div>
+$$
+\scriptsize{\displaystyle\sum_{x \in P_{j}}}\normalsize\vert\vert x - \bar{x}_{j}\vert\vert_{2}^{2} +
+\scriptsize{\frac{\vert P_{j}\vert}{\vert P_{j}\vert + 1}}\normalsize{\vert\vert x^{\ast} - \bar{x}_{j}\vert\vert_{2}^{2}}. \tag{4}\label{4}
+$$
+</div>
+That scale factor of {{ils}}\hspace{0.2em}^{\vert P_{j}\vert}/_{\vert P_{j}\vert + 1}{{ile}} actually
+accounts for the change in the cluster mean caused by the presence of {{ils}}x^{\ast}{{ile}};
+that tedious algebra I mentioned shows that replacing the new
+mean {{ils}}\bar{x}_{j}'{{ile}} with the old mean {{ils}}\bar{x}_{j}{{ile}} is
+equivalent to multiplying the square error of the new
+point {{ils}}x^{\ast}{{ile}} by that scale factor, i.e. \eqref{4} is equal to
+<div>
+$$
+\scriptsize{\displaystyle\sum_{x \in P_{j}}}\normalsize\vert\vert x - \bar{x}_{j}'\vert\vert_{2}^{2} +
+\vert\vert x^{\ast} - \bar{x}_{j}'\vert\vert_{2}^{2}. \tag{5}\label{5}
+$$
+</div>
+
+Using this expression for the change in total sum of square errors, we can see
+that the 'size' meant when describing the clusters returned by Lloyd's algorithm
+is a product of both the number of points in each
+cluster {{ils}}\vert P_{j}\vert{{ile}} and its unnormalized variance. The batch
+processing of Lloyd's algorithm means that two iterations are required for this
+information to be used by the algorithm. When a new point is assigned to some
+cluster {{ils}}\vert P_{j}\vert{{ile}}, the update step has to re-estimate the
+mean before the change to the cluster's total sum of squares is reflected, and
+only then is this information usable by the next iteration's assignment step.
+
+To make things more concrete, let's compare two
+clusters {{ils}}P_{j_{1}}{{ile}} and {{ils}}P_{j_{2}}{{ile}} in the special case
+where we only need to assign one point {{ils}}x^{\ast}{{ile}} to one of these
+clusters[^18]. Assume both clusters have the same total sum of square errors, and the
+distance from {{ils}}x^{\ast}{{ile}} to each cluster's centroid is equal:
+<div>
+$$
+\begin{align}
+\scriptsize{\displaystyle\sum_{x \in P_{j_{1}}}}\normalsize\vert\vert x - \bar{x}_{j_{1}}\vert\vert_{2}^{2} &=
+\scriptsize{\displaystyle\sum_{x \in P_{j_{2}}}}\normalsize\vert\vert x - \bar{x}_{j_{2}}\vert\vert_{2}^{2},\\[0.2em]
+\vert\vert x^{\ast} - \bar{x}_{j_{1}}\vert\vert_{2}^{2} &= \vert\vert x^{\ast} - \bar{x}_{j_{2}}\vert\vert_{2}^{2}.
+\end{align}
+$$
+</div>
+In this case, the cardinalities {{ils}}\vert P_{j_{1}}\vert{{ile}} and {{ils}}\vert P_{j_{2}}\vert{{ile}} of
+each cluster become the determining factor. Since we're only assigning {{ils}}x^{\ast}{{ile}} and
+the distances to each centroid are equal, Lloyd's algorithm will break the tie
+and assign {{ils}}x^{\ast}{{ile}} to one of the clusters arbitrarily. Let's
+say {{ils}}x^{\ast}{{ile}} was assigned to {{ils}}P_{j_{1}}{{ile}}. Following the
+update step, the sum of square errors for cluster {{ils}}P_{j_{1}}{{ile}} has increased
+by {{ils}}\scriptsize{\frac{\vert P_{j_{1}}\vert}{\vert P_{j_{1}}\vert + 1}}\normalsize{\vert\vert x^{\ast} - \bar{x}_{j_{1}}\vert\vert_{2}^{2}}{{ile}}.
+
+If {{ils}}\vert P_{j_{1}}\vert > \vert P_{j_{2}}\vert{{ile}},
+then {{ils}}\frac{\vert P_{j_{1}}\vert}{\vert P_{j_{1}}\vert + 1}\vert\vert x^{\ast} - \bar{x}_{j_{1}}\vert\vert_{2}^{2} >  \frac{\vert P_{j_{2}}\vert}{\vert P_{j_{2}}\vert + 1}\vert\vert x^{\ast} - \bar{x}_{j_{2}}\vert\vert_{2}^{2}{{ile}}, and
+the total sum of square errors can be reduced by moving {{ils}}x^{\ast}{{ile}} to {{ils}}P_{j_{2}}{{ile}}. So
+if the sums of squares of our two clusters are equal, {{ils}}x^{\ast}{{ile}} is
+assigned to the cluster with fewer points in at most two iterations.
+
+Of course, if the sums of square errors of our two clusters are not equal, then
+the behavior of Lloyd's algorithm is a more complicated interplay between the
+square errors and cardinalities of the different clusters. The spherical shape
+of the clusters can provide some insight into this aspect of a cluster's size.
+And of course, assigning only one point to one of two clusters is not a typical
+iteration of LLoyd's algorithm. But the above ain't just shootin' the breeze
+&mdash; that would be a waste of ammunition. It illustrates that the size of a
+cluster is determined by both the spread of the points from its centroid, as
+quantified by the sum of square errors, and the number of points in the cluster.
 
 ### Measurable Mistakes
 {:subsubsection}
@@ -818,6 +918,10 @@ approximation method to minimizing the total within cluster variance.
     {% include citation.html key="howslowkmeans" %}
 [^16]:
     {% include citation.html key="kmeansconvergenceprops" %}
+[^17]:
+    {% include citation.html key="optmethsclustanal"%}
+[^18]:
+    {% include citation.html key="methclustnums"%}
 
 <script src="/assets/js/d3.js"></script>
 <script src="/assets/js/elements/Unsupervised/Cluster_Analysis/kmeans.js"></script>

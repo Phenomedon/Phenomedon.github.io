@@ -182,3 +182,23 @@
   pages: 585 &ndash; 592
   year: 1995
   key: kmeansconvergenceprops
+
+- authors: Marriott, F. H. C.
+  title: Optimization methods of cluster analysis
+  type: article
+  journal: Biometrika
+  volume: 69
+  number: 2
+  year: 1982
+  pages: 417 &ndash; 421
+  doi: https://doi.org/10.2307/2335416
+  key: optmethsclustanal
+
+- authors: Mingjin Yan
+  title: Methods of Determining the Number of Clusters in a Data Set and a New Clustering Criterion
+  type: thesis
+  level: Ph.D. dissertation
+  university: Virginia Tech
+  year: 2005
+  url: http://hdl.handle.net/10919/29957
+  key: methclustnums
