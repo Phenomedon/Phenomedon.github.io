@@ -576,7 +576,13 @@ $$
 \bar{\xi} = (\bar{x}_{11}, \dots,\, \bar{x}_{1d},\, \bar{x}_{21}, \dots,\, \bar{x}_{2d}, \dots,\, \bar{x}_{k1}, \dots,\, \bar{x}_{kd})'.
 $$
 </div>
-
+{{begin_aside}}
+Technically, the {{ils}}\bar{\xi}{{ile}} need to be defined as an equivalence
+class of vectors in {{ils}}\mathbb{R}^{dk}{{ile}}. Because the order of the labels of our
+centroids {{ils}}\{1, \dots, k\}{{ile}} are arbitrary, we could permute the {{ils}}k{{ile}} centroids
+before we concatenate them to form a different point {{ils}}\bar{\xi}' \in \mathbb{R}^{dk}{{ile}}, but
+this {{ils}}\bar{\xi}'{{ile}} still corresponds to the same partition.
+{{end_aside}}
 Now all of the possible partitions of our data set corresponds to a discrete set
 of possible points {{ils}}\bar{\xi}\in\mathbb{R}^{df}{{ile}}. Starting from any
 intialization, it should be easy to see that after each assignment step, the
@@ -657,10 +663,10 @@ are unbounded and so have infinite area. All you have to do is move around the
 plot, and the proportion of each color will change.
 
 We can attempt to correct this error by drawing a box around our data set with
-dimensions defined by the smallest and largest coordinates in each dimension.
+lengths defined by the smallest and largest coordinates in each dimension.
 While this forces each Voronoi cell to be compact, it doesn't capture the real
-notion of 'size' used by Lloyd's algorithm; besides, those formerly infinite
-Voronoi cells are now governed by the outliers in our data.
+notion of 'size' used by Lloyd's algorithm; besides, the area of those
+formerly infinite Voronoi cells are now governed by the outliers in our data.
 
 Some descriptions instead use the number of points in each cluster to define
 their sizes, but this too does not completely describe the results of Lloyd's
@@ -746,6 +752,8 @@ iteration of LLoyd's algorithm. But the above ain't just shootin' the breeze
 &mdash; that would be a waste of ammunition. It illustrates that the size of a
 cluster is determined by both the spread of the points from its centroid, as
 quantified by the sum of square errors, and the number of points in the cluster.
+In trying to minimize the total sum of square errors, Lloyd's algorithm will
+tend to produce clusters of roughly equal size in precisely this sense.
 
 ### Measurable Mistakes
 {:subsubsection}
