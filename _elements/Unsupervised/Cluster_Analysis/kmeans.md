@@ -185,9 +185,23 @@ $$
 \mathbf{P}_{0} = \argmin_{\mathbf{P}\in\mathcal{P}}\sum_{j = 1}^{k}\sum_{x \in P_{j}}\vert\vert x - \bar{x}_{j}\vert\vert_{2}^{2}. \tag{1}\label{1}
 $$
 </div>
+{{begin_aside}}
+<strong>A quick note on terminology</strong> &mdash; for a cluster {{ils}}P_{j}{{ile}}, the
+quantity {{ils}}\small\sum_{x \in P_{j}}\vert\vert x - \bar{x}_{j}\vert\vert_{2}^{2}{{ile}} is
+commonly reffered to as the <dfn>Within Cluster Sum of Square Errors</dfn> (WCSS).
+The <dfn>Within Cluster Variance</dfn>,  {{ils}}\small\text{Var}(P_{j}){{ile}}, is the familiar sample variance formula
+applied to the cluster, {{ils}}\small\frac{1}{\vert P_{j}\vert}\sum_{x \in P_{j}}\vert\vert x - \bar{x}_{j}\vert\vert_{2}^{2}{{ile}}. The
+only difference between these two quantities is the normalization factor {{ils}}\small\frac{1}{\vert P_{j}\vert}{{ile}}.
+Except in cases where the distinction is necessary, I will adopt a common abuse
+of terminology and consider the WCSS as synonymous with the cluster variance,
+forgetting about the normalization.
+Since the mean minimizes both for a fixed cluster, which you can see for
+yourself with some elementary calculus, the distinction is mostly irrelevant to
+our purposes here.
+{{end_aside}}
 Sounds simple enough, right? All we have to do is try out all the different ways
-to split our data into {{ils}}k{{ile}} clusters, and find one that gives us the smallest
-total when we add up the sum of square errors within each cluster.
+to split our data into {{ils}}k{{ile}} clusters, and find one that gives us the
+smallest total when we add up the sum of square errors within each cluster.
 
 ## The Size of the Problem
 {: .subsection}
@@ -202,17 +216,17 @@ For a given {{ils}}n{{ile}} and {{ils}}k{{ile}},
 the corresponding Stirling number of the second kind,
 denoted by {{ils}}n \brace k{{ile}}, is given by the
 formula [^3]
+<div>
+$$
+{n \brace k} = \frac{1}{k!}\sum_{i=0}^{k}(-1)^{i}\binom{k}{i}(k - i)^{n}. \tag{2}\label{2}
+$$
+</div>
 {{begin_aside}}
 The Stirling numbers of the second kind count the number of non-empty partitions
 &mdash; every subset has to contain at least one point. This restriction is fine
 for the k-means problem, but some algorithms that solve k-means may run into
 issues of empty clusters.
 {{end_aside}}
-<div>
-$$
-{n \brace k} = \frac{1}{k!}\sum_{i=0}^{k}(-1)^{i}\binom{k}{i}(k - i)^{n}. \tag{2}\label{2}
-$$
-</div>
 See those factorials and binomial coefficients? Turns out we're dealing with
 **exponential** growth. For {{ils}} n \geq 2{{ile}}
 and {{ils}} 1 \leq k \leq n - 1 {{ile}}, we have the following lower and upper
@@ -579,7 +593,7 @@ $$
 {{begin_aside}}
 Technically, the {{ils}}\bar{\xi}{{ile}} need to be defined as an equivalence
 class of vectors in {{ils}}\mathbb{R}^{dk}{{ile}}. Because the order of the labels of our
-centroids {{ils}}\{1, \dots, k\}{{ile}} are arbitrary, we could permute the {{ils}}k{{ile}} centroids
+centroids {{ils}}\{1, \dots, k\}{{ile}} is arbitrary, we could permute the {{ils}}k{{ile}} centroids
 before we concatenate them to form a different point {{ils}}\bar{\xi}' \in \mathbb{R}^{dk}{{ile}}, but
 this {{ils}}\bar{\xi}'{{ile}} still corresponds to the same partition.
 {{end_aside}}
@@ -755,71 +769,116 @@ quantified by the sum of square errors, and the number of points in the cluster.
 In trying to minimize the total sum of square errors, Lloyd's algorithm will
 tend to produce clusters of roughly equal size in precisely this sense.
 
-### Measurable Mistakes
+### The Measure of a Mistake
 {:subsubsection}
 
-The greediness of the algorithm is apparent in both the assignment and
-estimation steps: assign each point to the currently nearest cluster mean, and
-then update our estimates of each cluster mean by using the points assigned to
-each cluster. Lloyd's procedure converges when there is no change
-in the estimated cluster means, or equivalently, when there is no change in the
-cluster assignments. No change in one implies no change in the other.
+We have so far covered some of the most salient properties of the k-means
+problem and the method most commonly associated with it, Lloyd's algorithm.
+Hopefully, you now have a firm grasp on both, as well as the distinction between
+them. This is a natural point at which to address a mistake that appears fairly
+common in both the literature and implementations, and which ultimately
+originates from an ignorance of the topics we've just covered.
 
-The distinction between the original problem and the algorithm used to solve it
-pays off here in addressing some common sources of confusion about k-means: the
-assignment step in Lloyd's algorithm has assumed additional structure not given
-by the original problem. By assigning each point to the currently nearest
-centroid, we are minimizing the square error on an individual, per-point basis.
-In many situations, this will tend toward lowering the total within cluster sum
-of square errors &mdash; but not always. The more sophisticated Hartigan-Wong
-algorithm, which is the default algorithm in **R**, is better able to deal with
-circumstances where the batch nature of Lloyd's algorithm gets stuck in local
-minima.
+If you look back at equation \eqref{1}, you'll see that the k-means problem is
+one of variance minimization. The objective is to find a partition of our data
+into k clusters that produces the lowest possible total within cluster variance.
+Since the means of each cluster are the unique minimizers of the variance, they
+naturally show up.
 
-In the assignment step, each point is assigned to the centroid that produces
-the minimum square error. As the square root function is monotonic, this is
-equivalent to assigning each point to the nearest centroid. And this is where
-many people get confused &mdash; since the assignment step is selecting
-the cluster assignments based on minimizing *Euclidean* distance, why can't we
-have a more general algorithm that uses arbitrary metrics? Throw in an *L1*
-metric, and you've improved your algorithm by making it robust to outliers,
-right? Wrong. The fact that minimizing Euclidean distance also minimizes the
-square error is a consequence of algebra. The *problem* we are trying to solve
-is that of estimating the cluster *means*. That's why we chose the variance as
-our objective function, and why Lloyd's algorithm minimizes the square error in
-the assignment step. Using the square error, or variance, allows us to estimate
-the means. If you try to throw in some other, arbitrary metric into the
-assignment step, then the "centroids" you compute in the update step are no
-longer based on trying to minimize the variance. You've basically just given
-yourself an arbitrarily worse assignment to try to estimate the mean of each
-cluster. Another issue I have seen in some explanations of Lloyd's algorithm
-is using the Euclidean distance itself in the assignment step. Again, since the
-square root function is monotonic, this only adds an unnecessary computation to
-each assignment. So while it is fine to think about the assignment step in terms
-of Euclidean distances:
-- Do NOT take a square root in any implementation &mdash; you're only making
-your algorithm less efficient
-- Do NOT try to replace the square error with an arbitrary metric. We're finding
-*means*, which is why we were minimizing variance.
+The number of candidate partitions is huge, {{ils}}O(k^n){{ile}} from bounds on
+Stirling's numbers of the second kind. Using those equivalence class vectors of
+means {{ils}}\bar{\xi} \in \mathbb{R}^{dk}{{ile}} from our discussion of local
+optimality, a combinatorial argument can be applied to the algebraic surfaces
+defining the boundaries of the Voronoi tesselations corresponding to each
+partition, and our bound can be improved to {{ils}}O(n^{dk + 1}){{ile}} [^19].
+That's still huge. So we resorted to heuristic methods &mdash; sacrificing
+optimality for speed. The heuristic we've studied is Lloyd's algorithm. This
+procedure makes some further assumptions not included in the k-means problem,
+some pertinent consequences of which we've examined above.
 
-Unfortunately, this confusion about k-means seems rampant. The MATLAB kmeans
-function allows alternate distance functions to be used with Lloyd's algorithm,
-and the documentation contains an example of an 'analysis' using the Manhattan
-distance. The amap package in R, which according to rdocumentation.org is in the
+Examining the assignment step, Lloyd's algorithm can be classified as a greedy
+optimization method: each {{ils}}x_{i}{{ile}} minimizes its own square error
+with glutinous disregard for the square errors of any other
+point {{ils}}x_{\ell}{{ile}}, where {{ils}}\small\ell \neq i{{ile}}.
+
+Since every point behaves greedily during the assignment step, some simple
+algebra shows that minimizing the square error to a centroid is the same thing
+as minimizing the *Euclidean* distance. Just take the square root, bada bing
+bada boom, you've got the distance. Since the square root is monotonic, the
+minimizer of one is the minimizer of the other:
+<div>
+$$
+\argmin_{\scriptsize\mu \in \{\mu_{i}\}_{1}^{k}}\vert\vert x_{i} - \mu \vert\vert_{2}^{2} = \argmin_{\scriptsize\mu \in \{\mu_{i}\}_{1}^{k}}\vert\vert x_{i} - \mu \vert\vert_{2}
+$$
+</div>
+
+And this is where the trouble starts. That the assignment step selects the
+nearest centroid for every point is incidental, a tautology of algebra. When
+explaining what Lloyd's algorithm does, more internet posts than I'd like to
+remember describe the assignment step *only* as finding the nearest centroid.
+Just check out any Medium article on k-means. Sure, this is an equivalent way of
+describing the assignment step, but it is actually a consequence of the specific
+heuristics Lloyd's algorithm uses: splitting the estimation task into separate
+assignment and update steps, and using greedy optimization in assignment. This
+heuristic works fairly well in minimizing the true k-means objective, the total
+within cluster variance, but as we've already seen it does not guarantee finding
+the true minimum. Unfortunately, many people conflate the algorithm with the
+problem, and relegate themselves to a superficial understanding polluted by
+epiphenomena.
+
+The first issue that arises from this incomprehension commonly shows up when
+someone tries to roll their own version of Lloyd's algorithm &mdash; they'll
+actually perform a square root operation for every point and centroid pair in
+the assignment step to find the distance. These are garbage operations. Even if
+your square root implementation conforms to IEEE 754 or 854 floating point
+standards with exact rounding [^20], you're still introducing an unnecessary
+operation and losing precision. Those square roots might be inconsequential on
+toy data sets, but for massive data sets and distributed processing this is
+more likely to be an issue.
+
+Now if you take that first mistake, pretend it's insight, and smugly elaborate on
+it, you'll get the second, and much worse, error stemming from this confusion:
+swapping arbitrary non-Euclidean metrics in place of the square error in the
+assignment step while leaving the update step unchanged. If the last mistake was
+garbage, this one is the dump that garbage took. Both the assignment and update
+steps of Lloyd's algorithm try to minimize variance &mdash; they each have the
+same objective in mind. If instead of the square error, the assignment step
+uses, say, the {{ils}}L_{1}{{ile}} metric to determine the 'nearest' centroid
+for every point, the assignment and update steps of Lloyd's algorithm now have
+two different objectives. You know what minimizes the {{ils}}L_{1}{{ile}} error?
+The median. Since the result of one step provides the parameters of the other
+step, this just creates a cycle of compounding bad estimates. That guarantee
+that we'd at least find a locally optimal solution using Lloyd's algorithm?
+Gone. You're bada bing bada screwed.
+
+Unfortunately, this perversion of Lloyd's algorithm seems rampant &mdash; again,
+just check any Medium article on k-means. Such ridiculous methods also show up
+in the literature [^21][^22][^23][^24], as well as in primary implementations in
+MATLAB and mathematica. The MATLAB *documentation* contains an example of an
+'analysis' using the Manhattan distance. MATLABS kmeans algorithm tries to
+correct for the potential bunkum of swapping in a non-Euclidean metric by
+performing a 'corrective' pass over every data point at the end. Good luck with
+that. The amap package in R, which according to rdocumentation.org is in the
 95th percentile in terms of overall downloads, has a kmeans implementation that
-allows arbitrary distance functions with Lloyd's algorithm. The kmeans in amap
-should never be used. The kmeans function in the standard stats package is a far
-better function, and uses Hartigan-Wong by default. There have even been several
-published papers that try to use alternative metrics in place of the square
-error in Lloyd's algorithm, presenting this fundamental error as a novel method
-meriting careful analysis. These algorithms are incorrect. Listen, sure, you'll
-get some results. Hell, if you cap the iteration number, by definition your
-algorithm will converge. But like my grandmammy never said, just cause you
-put a cat in the oven, don't make it a biscuit. Whatever these algorithms are
-producing, it is NOT a solution to the kmeans problem. If you use a different
-metric in the assignment step, then you have to use a different procedure in
-your update step. The convergence of Lloyd's algorithm is based on both steps
-operating on the same problem - that of finding the means of the clusters.
+allows arbitrary distance functions with an inefficient implementation of
+Lloyd's algorithm as a bonus. The kmeans function in amap should never be used;
+the standard stats package's kmeans function is a far better implementation,
+which also uses the Hartigan-Wong algorithm by default.
+
+Listen, sure, you'll get some results. Hell, if you cap the iteration number,
+by definition your algorithm will 'converge.' But like my grandmammy said,
+just cause you put a cat in the oven, don't make it a biscuit. The convergence
+of Lloyd's algorithm for the k-means problem is based on both steps operating on
+the same objective - minimizing cluster variance. If you use a non-Euclidean
+metric in the assignment step, then this alteration has to be reflected in an
+appropriate modification of your update step. Now, there are in fact modified
+versions of Lloyd's algorithm that do just that. Unfortunately, the term
+'k-means' is sometimes used to describe these procedures, even though the
+cluster centers are no longer given by the arithmetic means of the cluster
+points. But at least these procedures make sense. The mathematical soundness of
+some such generalizations can be grounded in the theory of Bregman divergences,
+which I'll touch on when discussing the connection of k-means algorithms to
+Gaussian mixture models.
 
 ## Sequential K-Means
 {: .subsection}
@@ -930,6 +989,17 @@ approximation method to minimizing the total within cluster variance.
     {% include citation.html key="optmethsclustanal"%}
 [^18]:
     {% include citation.html key="methclustnums"%}
-
+[^19]:
+    {% include citation.html key="weightedvoronoi" %}
+[^20]:
+    {% include citation.html key="everycsfloatpoint" %}
+[^21]:
+    {% include citation.html key="kmeans3dists"%}
+[^22]:
+    {% include citation.html key="kmeansdiffdists"%}
+[^23]:
+    {% include citation.html key="kmeansbadtechnique"%}
+[^24]:
+    {% include citation.html key="kmeansperfdist"%}
 <script src="/assets/js/d3.js"></script>
 <script src="/assets/js/elements/Unsupervised/Cluster_Analysis/kmeans.js"></script>

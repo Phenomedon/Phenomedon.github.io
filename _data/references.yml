@@ -202,3 +202,76 @@
   year: 2005
   url: http://hdl.handle.net/10919/29957
   key: methclustnums
+
+- authors:
+    - Mary Inaba
+    - Naoki Katoh
+    - Hiroshi Imai
+  title: Applications of weighted Voronoi diagrams and randomization to variance-based k-clustering
+  type: article
+  journal: Proceedings of the Tenth Annual Symposium on Computational Geometry
+  pages: 332 &ndash; 339
+  publisher: ACM
+  year: 1994
+  doi: 10.1145/177424.178042
+  key: weightedvoronoi
+
+- authors: David Goldberg
+  title: What every computer scientist should know about floating-point arithmetic
+  type: article
+  publisher: ACM
+  journal: ACM Computing Surveys (CSUR)
+  volume: 23
+  number: 1
+  year: 1991
+  pages: 5 &ndash; 48
+  key: everycsfloatpoint
+
+- authors:
+    - Singh, Archana
+    - Avantika Yadav
+    - Ajay Rana
+  title: K-means with Three different Distance Metrics
+  type: article
+  journal: International Journal of Computer Applications
+  volume: 67
+  number: 10
+  year: 2013
+  doi: https://doi.org/10.5120/11430-6785
+  key: kmeans3dists
+
+- authors:
+    - Dibya Jyoti Bora
+    - Anil Kumar Gupta
+  title: Effect of different distance measures on the performance of K-means algorithm&#58; an experimental study in Matlab
+  type: article
+  journal: Computing Research Repository
+  url: http://arxiv.org/abs/1405.7471
+  year: 2014
+  key: kmeansdiffdists
+
+- authors:
+    - Laurence Morissette
+    - Sylvain Chartier
+  title: The k-means clustering technique&#58; General considerations and implementation in Mathematica
+  type: article
+  journal: Tutorials in Quantitative Methods for Psychology
+  volume: 9
+  number: 1
+  year: 2013
+  pages: 15 &ndash; 24
+  doi: https://doi.org/10.20982/tqmp.09.1.p015
+  key: kmeansbadtechnique
+
+- authors:
+    - Thakare, Y. S.
+    - S. B. Bagal.
+  title: Performance evaluation of K-means clustering algorithm with various distance metrics
+  type: article
+  journal: International Journal of Computer Applications
+  volume: 110
+  number: 11
+  year: 2015
+  pages: 12 &ndash; 16
+  doi: https://doi.org/10.5120/19360-0929
+  key: kmeansperfdist
