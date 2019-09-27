@@ -431,18 +431,20 @@ both Forgy and Random Partition initialization are among the worst methods
 to start Lloyd's algorithm. For even reasonably small datasets, Forgy
 initialization tends to vary wildly from one run to the next, and, as discussed
 above, may under represent the cluster structure by selecting initial centroids
-that are close together. Random Partition initialization varies less between
-runs, but this is an obvious byproduct of the tendency to position initial
-centroids towards the overall center of the data set. This also means successive
-runs of Random Partition tend to produce similar initializations. If such central
-initializations cause Lloyd's algorithm to converge to a local minimum with
-poor within cluster variance, then repeated runs using Random Partition are
-unlikely to produce any noticeable improvement. The idiosyncrasies of a
-particular data sets may make it appear as if Random Partition tends to produce
-lower within cluster variance than Forgy initialization [^7], but such a
-conclusion fails to account for the similar, centrally located initial
-centroids of each Random Partition initialization. You might just get lucky
-and Random Partition initialization converges to a good clustering.
+that are close together or outlying points. Random Partition initialization
+varies less between runs, but this is an obvious byproduct of the tendency to
+position initial centroids towards the overall center of the data set. This also
+means successive runs of Random Partition tend to produce similar
+initializations. If such central initializations cause Lloyd's algorithm to
+converge to a local minimum with poor within cluster variance, then repeated
+runs using Random Partition are unlikely to produce any noticeable improvement.
+The idiosyncrasies of a particular data sets may make it appear as if Random
+Partition tends to produce lower within cluster variance than any one Forgy
+initialization [^7], but such a conclusion fails to account for the similar,
+centrally located initial centroids of each Random Partition initialization.
+You might just get lucky and Random Partition initialization converges to a
+good clustering. The same might occur with a Forgy initialization, but with
+more variability. Both methods are still generally bad.
 
 Since Lloyd's algorithm is highly sensitive to initial conditions, as discussed
 below, careful initialization methods can greatly improve results. More
@@ -798,7 +800,7 @@ some pertinent consequences of which we've examined above.
 
 Examining the assignment step, Lloyd's algorithm can be classified as a greedy
 optimization method: each {{ils}}x_{i}{{ile}} minimizes its own square error
-with glutinous disregard for the square errors of any other
+with gluttonous disregard for the square errors of any other
 point {{ils}}x_{\ell}{{ile}}, where {{ils}}\small\ell \neq i{{ile}}.
 
 Since every point behaves greedily during the assignment step, some simple
