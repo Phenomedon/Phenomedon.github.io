@@ -7,8 +7,16 @@
   display: grid;
   align-items: center;
   justify-items: center;
-  position: sticky;
-  top:15px;
+  height: 150px;
+  //position: sticky;
+  //top:15px;
+  .site-icon{
+  top: 15px;
+  }
+  .site-title {
+    font-size: 1rem;
+    top: 0px;
+  }
 }
 
 // Site nav box
@@ -16,17 +24,22 @@
   font-size: 1.5rem;
   //border: 5px solid green;
   padding-left: 5px;
-  position: sticky;
-  top: 15px;
+  border-bottom: 2px solid $terminal-orange;
+  opacity: 1;
   z-index: 2;
   display: grid;
   align-items: center;
-  ul {
-    @include type-setting(0);
-    margin-bottom: 0;
-    li {
-      display:inline;
-      margin-right: 20px;
+  .nav-links{
+    ul {
+      position: sticky;
+      top: 0;
+      overflow: auto;
+      @include type-setting(0);
+      margin-bottom: 0;
+      li {
+        display:inline;
+        margin-right: 20px;
+      }
     }
   }
 }
@@ -43,7 +56,7 @@
   font-size: 1.6rem;
   p {
     strong {
-      color: $terminal-purple-light;
+      color: $terminal-bold;
     }
   }
   .page-title {
@@ -77,7 +90,7 @@
   }
   .social-media-list {
     li {
-      display: inline;
+      display: inline-flex;
       margin-right: 20px;
     }
   }
@@ -114,12 +127,23 @@
 sup {
   vertical-align: baseline;
   font-size: 1em;
+  a.footnote {
+    color: $terminal-orange-peel;
+    }
   ::before {
     content: "[";
   }
   ::after {
     content: "]";
   }
+}
+
+.MathJax_ref {
+  color: $terminal-orange-peel;
+}
+
+.reversefootnote {
+  color: $terminal-orange-peel;
 }
 
 // Set font-families
@@ -212,8 +236,8 @@ a {
   position: relative;
   ul.toc {
     color: $terminal-orange-peel;
-    position: fixed; //change to fixed
-    top: 10em;
+    position: relative; //change to fixed
+    top: 5em;
     li {
       a {
         //position: fixed;

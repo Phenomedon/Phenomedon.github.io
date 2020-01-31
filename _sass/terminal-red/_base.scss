@@ -16,16 +16,17 @@ dl, dd, ol, ul, figure {
 body {
     display: grid;
     grid-template-areas:
-    "home header header"
+    "home header special"
     "nav article sidebar"
-    "nav footer footer";
-    grid-template-rows: 80px 1fr 70px;
-    grid-template-columns: 24% 1fr 24%;
+    "reserved footer r2";
+    grid-template-rows: 120px 1fr 70px;
+    grid-template-columns: 28% 1fr 29%;
     grid-row-gap: 10px;
     grid-column-gap: 10px;
     height: 100vh;
     font-family: $base-font-family;
     color: $terminal-amber;
+    background-color: $black;
     background-image: radial-gradient(circle, $tube-red, $black);
     -webkit-text-size-adjust: 100%;
     -webkit-font-feature-settings: "kern" 1;
@@ -33,10 +34,10 @@ body {
          -o-font-feature-settings: "kern" 1;
             font-feature-settings: "kern" 1;
     font-kerning: normal;
-    @include text-bordered-triple-fuzz(0.5, 1, $yellow, 0.1,
-                                       0, 2.5, $terminal-vermilion, 0.3,
-                                       0, 5, $terminal-orange-peel, 0.2,
-                                       0, 10, $terminal-vermilion, 0.1);
+    //@include text-bordered-triple-fuzz(0.5, 1, $yellow, 0.1,
+    //                                 0, 2.5, $terminal-vermilion, 0.3,
+    //                                 0, 5, $terminal-orange-peel, 0.2,
+    //                                 0, 10, $terminal-vermilion, 0.1);
     //@include text-border(1, $yellow, 0.1, 0.5);
     margin: auto 10px;
 }
@@ -65,7 +66,7 @@ body {
   grid-area: footer;
   display: grid;
   grid-template-areas: "foot-col-1 foot-col-2 foot-col-3";
-  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-columns: 17% 2fr 25%;
   }
   .footer-col-1 {
     grid-area: foot-col-1;
@@ -75,6 +76,12 @@ body {
   }
   .footer-col-3 {
     grid-area: foot-col-3;
+    .license {
+        color: $terminal-orange;
+        font-size: 1.3em;
+        position: relative;
+        top: .2em;
+    }
   }
 
 // Highlight text from 45th to 70th character to set optimal mainContent width
